@@ -1,0 +1,6 @@
+AI
+Menu
+Multiplayer (local + reseau)
+VoIP
+Système de score
+Power ups
