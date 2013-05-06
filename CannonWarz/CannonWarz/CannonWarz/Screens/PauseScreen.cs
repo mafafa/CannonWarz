@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CannonWarz.Screens
 {
-    public class MainMenu : AbsScreen
+    class PauseScreen : AbsScreen
     {
-        public MainMenu(Game1 game)
+        public PauseScreen(Game1 game)
             : base(game)
         {
 
