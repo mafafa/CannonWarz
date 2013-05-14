@@ -10,7 +10,6 @@ namespace CannonWarz
     public class GameScreenManager
     {
         private GameScreenManager(Game1 game)
-            //:base(game)
         {
             ScreenStack = new Stack<AbsScreen>();
             Game = game;

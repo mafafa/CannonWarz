@@ -10,9 +10,9 @@ namespace CannonWarz.Screens
     class Background : AbsScreen
     {
         public Background(Game1 game, SpriteBatch spriteBatch)
-            : base(game)
+            : base(game, spriteBatch)
         {
-            SpriteBatch = spriteBatch;
+            
         }
 
         public override void Activate()
@@ -28,6 +28,11 @@ namespace CannonWarz.Screens
         public override void Update(GameTime gameTime)
         {
             // We don't need to update the background as it is a static image
+        }
+
+        protected override void CheckKeyboardKeysState(GameTime gameTime)
+        {
+            // We don't need to check for keyboard state as it is the background image
         }
 
         public override void Draw(GameTime gameTime)

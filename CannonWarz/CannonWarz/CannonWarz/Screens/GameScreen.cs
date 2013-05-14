@@ -11,10 +11,8 @@ namespace CannonWarz.Screens
     class GameScreen : AbsScreen
     {
         public GameScreen(Game1 game, SpriteBatch spriteBatch)
-            : base(game)
+            : base(game, spriteBatch)
         {
-            SpriteBatch = spriteBatch;
-
             NumberOfPlayers = 4;
             CurrentPlayer = 0;
 
@@ -86,12 +84,66 @@ namespace CannonWarz.Screens
             {
                 explosionList.Remove(explosion);
             }
-
-            base.Update(gameTime);
         }
 
         #region -------------------- UPDATE FUNCTIONS --------------------
 
+        protected override void CheckKeyboardKeysState(GameTime gameTime)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                GameScreenManager gameScreenManager = GameScreenManager.Instance;
+                gameScreenManager.Push(new PauseScreen(Game, SpriteBatch));
+            }
+
+            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                PlayersArray[CurrentPlayer].Angle -= 0.01f;
+                VerifyAngleRange();
+            }
+
+            else if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                PlayersArray[CurrentPlayer].Angle += 0.01f;
+                VerifyAngleRange();
+            }
+
+            else if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                PlayersArray[CurrentPlayer].Power += 1;
+                VerifyPowerRange();
+            }
+
+            else if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                PlayersArray[CurrentPlayer].Power -= 1;
+                VerifyPowerRange();
+            }
+
+            else if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
+            {
+                PlayersArray[CurrentPlayer].Power += 20;
+                VerifyPowerRange();
+            }
+
+            else if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
+            {
+                PlayersArray[CurrentPlayer].Power -= 20;
+                VerifyPowerRange();
+            }
+
+            else if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                if (RocketIsFlying == false)
+                {
+                    RocketIsFlying = true;
+
+                    Rocket rocket = new Rocket(Game.RocketTexture, Game.SmokeTexture, PlayersArray[CurrentPlayer].Position, PlayersArray[CurrentPlayer].Angle, PlayersArray[CurrentPlayer].Power);
+                    instantiatedRocketList.Add(rocket);
+                }
+            }
+        }
+        
         private void UpdateRocket()
         {
             if (RocketIsFlying)
@@ -152,61 +204,6 @@ namespace CannonWarz.Screens
 
                         explosion.ParticleList[i] = particle;
                     }
-                }
-            }
-        }
-
-        private void CheckKeyboardKeysState(GameTime gameTime)
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Game.Exit();
-            }
-
-            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                PlayersArray[CurrentPlayer].Angle -= 0.01f;
-                VerifyAngleRange();
-            }
-
-            else if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                PlayersArray[CurrentPlayer].Angle += 0.01f;
-                VerifyAngleRange();
-            }
-
-            else if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                PlayersArray[CurrentPlayer].Power += 1;
-                VerifyPowerRange();
-            }
-
-            else if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                PlayersArray[CurrentPlayer].Power -= 1;
-                VerifyPowerRange();
-            }
-
-            else if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
-            {
-                PlayersArray[CurrentPlayer].Power += 20;
-                VerifyPowerRange();
-            }
-
-            else if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
-            {
-                PlayersArray[CurrentPlayer].Power -= 20;
-                VerifyPowerRange();
-            }
-
-            else if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                if (RocketIsFlying == false)
-                {
-                    RocketIsFlying = true;
-
-                    Rocket rocket = new Rocket(Game.RocketTexture, Game.SmokeTexture, PlayersArray[CurrentPlayer].Position, PlayersArray[CurrentPlayer].Angle, PlayersArray[CurrentPlayer].Power);
-                    instantiatedRocketList.Add(rocket);
                 }
             }
         }
@@ -411,8 +408,6 @@ namespace CannonWarz.Screens
             SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             DrawExplosion();
             SpriteBatch.End();
-
-            base.Draw(gameTime);
         }
 
         #region --------------------- DRAW FUNCTIONS ---------------------
@@ -601,20 +596,10 @@ namespace CannonWarz.Screens
 
         #region --------------------- PRIVATE FIELDS ---------------------
 
-        //private SpriteFont font;
-
         private Terrain terrain;
 
-        /*private Texture2D compassTexture;
-        private float compassScaling;
-        private Texture2D pinTexture;
-        private float pinScaling;*/
-
         private List<Rocket> instantiatedRocketList;
-        //private Texture2D rocketTexture;
-        //private Texture2D smokeTexture;
 
-        //private Texture2D explosionParticleTextures;
         private List<Explosion> explosionList;
 
         #endregion

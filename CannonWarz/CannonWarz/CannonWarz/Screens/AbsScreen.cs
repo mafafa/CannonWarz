@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace CannonWarz.Screens
 {
     public abstract class AbsScreen
     {
-        protected AbsScreen(Game1 game)
-            //: base(game)
+        protected AbsScreen(Game1 game, SpriteBatch spriteBatch)
         {
             Initialized = false;
             Game = game;
+            SpriteBatch = spriteBatch;
         }
 
         public abstract void Activate();
@@ -22,19 +23,16 @@ namespace CannonWarz.Screens
 
         public virtual void Initialize()
         {
-            //base.Initialize();
             Initialized = true;
         }
 
-        public virtual void Update(GameTime gameTime)
-        {
-            //base.Update(gameTime);
-        }
+        public abstract void Update(GameTime gameTime);
 
-        public virtual void Draw(GameTime gameTime)
-        {
-            //base.Draw(gameTime);
-        }
+        protected abstract void CheckKeyboardKeysState(GameTime gameTime);
+
+        public abstract void Draw(GameTime gameTime);
+
+        #region ----------------------- PROPERTIES -----------------------
 
         public Game1 Game
         {
@@ -59,5 +57,7 @@ namespace CannonWarz.Screens
             get;
             set;
         }
+
+        #endregion
     }
 }

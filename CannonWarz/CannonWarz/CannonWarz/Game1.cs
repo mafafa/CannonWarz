@@ -43,7 +43,7 @@ namespace CannonWarz
             // Must be called after base.Initialize() as that will call LoadContent() and we need the textures loaded.
             GameScreenManager gameScreenManager = GameScreenManager.Create(this);
             gameScreenManager.Push(new Background(this, spriteBatch));
-            //gameScreenManager.Push(new MainMenu(this));
+            //gameScreenManager.Push(new MainMenu(this, spriteBatch));
             gameScreenManager.Push(new GameScreen(this, spriteBatch));
             gameScreenManager.Initialize();
         }
@@ -63,6 +63,7 @@ namespace CannonWarz
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // We load the textures
+            opaqueTexture = backgroundTexture = Content.Load<Texture2D>("Opaque");
             backgroundTexture = Content.Load<Texture2D>("GameBackground");
             groundTexture = Content.Load<Texture2D>("SandTexture");
             carriageTexture = Content.Load<Texture2D>("Carriage");
@@ -78,6 +79,7 @@ namespace CannonWarz
             explosionParticleTextures = Content.Load<Texture2D>("Explosion");
 
             generalFont = Content.Load<SpriteFont>("screenWritingFont");
+            menuFont = Content.Load<SpriteFont>("menuFont");
         }
 
         /// <summary>
@@ -154,6 +156,9 @@ namespace CannonWarz
         private int screenHeight;
 
         private SpriteFont generalFont;
+        private SpriteFont menuFont;
+
+        private Texture2D opaqueTexture;
 
         private Texture2D groundTexture;
         private Texture2D backgroundTexture;
@@ -190,6 +195,16 @@ namespace CannonWarz
         public SpriteFont GeneralFont
         {
             get { return generalFont; }
+        }
+
+        public SpriteFont MenuFont
+        {
+            get { return menuFont; }
+        }
+
+        public Texture2D OpaqueTexture
+        {
+            get { return opaqueTexture; }
         }
 
         public Texture2D GroundTexture
