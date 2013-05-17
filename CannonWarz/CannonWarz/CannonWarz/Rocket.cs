@@ -1,145 +1,226 @@
-﻿using System;
+﻿/**
+// file:	Rocket.cs
+//
+// summary:	Implements the rocket class
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CannonWarz
 {
+    /**
+     * <summary>    The rocket class. </summary>
+     */
     public class Rocket
     {
+        /**
+         * <summary>    Constructor. </summary>
+         *
+         * <param name="rocketTexture">         The rocket texture. </param>
+         * <param name="smokeTexture">          The rocket's smoke texture. </param>
+         * <param name="initPlayerPosition">    The initial player's position. </param>
+         * <param name="initPlayerAngle">       The initial player's shot angle. </param>
+         * <param name="initPlayerPower">       The initial player's shot power. </param>
+         */
         public Rocket(Texture2D rocketTexture, Texture2D smokeTexture, Vector2 initPlayerPosition, float initPlayerAngle, float initPlayerPower)
         {
-            this.rocketTexture = rocketTexture;
-            rocketColorArray = Game1.TextureTo2DArray(rocketTexture);
+            this._rocketTexture = rocketTexture;
+            _rocketColorArray = Game1.TextureTo2DArray(rocketTexture);
             
-            rocketPosition = initPlayerPosition;
+            _rocketPosition = initPlayerPosition;
             // Adjustements so the rocket is positioned properly on the cannon at first
-            rocketPosition.X += 30;
-            rocketPosition.Y -= 15;
+            _rocketPosition.X += 30;
+            _rocketPosition.Y -= 15;
             
-            rocketAngle = initPlayerAngle;
+            _rocketAngle = initPlayerAngle;
             
             // We create a vector "up" and multiply it by a rotation matrix to get the rocket's real direction
             Vector2 up = new Vector2(0, -1);
-            Matrix rotMatrix = Matrix.CreateRotationZ(rocketAngle);
-            rocketDirection = Vector2.Transform(up, rotMatrix);
-            rocketDirection *= initPlayerPower / 50.0f;
+            Matrix rotMatrix = Matrix.CreateRotationZ(_rocketAngle);
+            _rocketDirection = Vector2.Transform(up, rotMatrix);
+            _rocketDirection *= initPlayerPower / 50.0f;
 
-            rocketScaling = 0.1f;
+            _rocketScaling = 0.1f;
             
-            this.smokeTexture = smokeTexture;
-            smokeParticleList = new List<Vector2>();
-            randSmokeDeviation = new Random();
-            smokeScaling = 0.2f;
+            this._smokeTexture = smokeTexture;
+            _smokeParticleList = new List<Vector2>();
+            _randSmokeDeviation = new Random();
+            _smokeScaling = 0.2f;
         }
 
+        /**
+         * <summary>    Constructor. </summary>
+         *
+         * <param name="rocketTexture"> The rocket texture. </param>
+         * <param name="smokeTexture">  The rocket's smoke texture. </param>
+         * <param name="initPosition">  The initial player's position. </param>
+         * <param name="initAngle">     The initial player's shot angle. </param>
+         * <param name="initDirection"> The initial player's shot direction. </param>
+         */
         public Rocket(Texture2D rocketTexture, Texture2D smokeTexture, Vector2 initPosition, float initAngle, Vector2 initDirection)
         {
-            this.rocketTexture = rocketTexture;
-            rocketColorArray = Game1.TextureTo2DArray(rocketTexture);
-            rocketPosition = initPosition;
-            rocketAngle = initAngle;
-            rocketDirection = initDirection;
-            rocketScaling = 0.1f;
+            this._rocketTexture = rocketTexture;
+            _rocketColorArray = Game1.TextureTo2DArray(rocketTexture);
+            _rocketPosition = initPosition;
+            _rocketAngle = initAngle;
+            _rocketDirection = initDirection;
+            _rocketScaling = 0.1f;
 
-            this.smokeTexture = smokeTexture;
-            smokeParticleList = new List<Vector2>();
-            randSmokeDeviation = new Random();
-            smokeScaling = 0.2f;
+            this._smokeTexture = smokeTexture;
+            _smokeParticleList = new List<Vector2>();
+            _randSmokeDeviation = new Random();
+            _smokeScaling = 0.2f;
         }
 
+        /**
+         * <summary>    Creates smoke particles for the rocket. </summary>
+         *
+         * <param name="particleQuantity">  The particle quantity. </param>
+         */
         public void CreateSmokeParticles(int particleQuantity)
         {
             // We create smoke particles and generate a random pattern to them
             for (int i = 0; i < particleQuantity; i++) // Raise the value left of the < if you want more smoke
             {
-                Vector2 smokePos = rocketPosition;
-                smokePos.X += randSmokeDeviation.Next(10) - 5;
-                smokePos.Y += randSmokeDeviation.Next(10) - 5;
-                smokeParticleList.Add(smokePos);
+                Vector2 smokePos = _rocketPosition;
+                smokePos.X += _randSmokeDeviation.Next(10) - 5;
+                smokePos.Y += _randSmokeDeviation.Next(10) - 5;
+                _smokeParticleList.Add(smokePos);
             }
         }
 
+        /**
+         * <summary>    Deletes the smoke particles for the rocket. </summary>
+         */
         public void DeleteSmokeParticles()
         {
-            smokeParticleList = new List<Vector2>();
+            _smokeParticleList = new List<Vector2>();
         }
 
         #region --------------------- PRIVATE FIELDS ---------------------
 
-        private Texture2D rocketTexture;
-        private Color[,] rocketColorArray;
-        private Vector2 rocketPosition;
-        private Vector2 rocketDirection;
-        private float rocketAngle;
-        private float rocketScaling;
+        private Texture2D _rocketTexture;
+        private Color[,] _rocketColorArray;
+        private Vector2 _rocketPosition;
+        private Vector2 _rocketDirection;
+        private float _rocketAngle;
+        private float _rocketScaling;
 
-        private Texture2D smokeTexture;
-        private List<Vector2> smokeParticleList;
-        private Random randSmokeDeviation;
-        private float smokeScaling;
+        private Texture2D _smokeTexture;
+        private List<Vector2> _smokeParticleList;
+        private Random _randSmokeDeviation;
+        private float _smokeScaling;
 
         #endregion
 
         #region ----------------------- PROPERTIES -----------------------
 
+        /**
+         * <summary>    Gets or sets the rocket position. </summary>
+         *
+         * <value>  The rocket position. </value>
+         */
         public Vector2 RocketPosition
         {
-            get { return rocketPosition; }
-            set { rocketPosition = value; }
+            get { return _rocketPosition; }
+            set { _rocketPosition = value; }
         }
 
+        /**
+         * <summary>    Gets or sets the rocket direction. </summary>
+         *
+         * <value>  The rocket direction. </value>
+         */
         public Vector2 RocketDirection
         {
-            get { return rocketDirection; }
-            set { rocketDirection = value; }
+            get { return _rocketDirection; }
+            set { _rocketDirection = value; }
         }
 
+        /**
+         * <summary>    Gets or sets the rocket angle. </summary>
+         *
+         * <value>  The rocket angle. </value>
+         */
         public float RocketAngle
         {
-            get { return rocketAngle; }
-            set { rocketAngle = value; }
+            get { return _rocketAngle; }
+            set { _rocketAngle = value; }
         }
-        
+
+        /**
+         * <summary>    
+         *  Gets or sets the rocket texture. This will also modify the RocketColorArray
+         *  property.
+         * </summary>
+         *
+         * <value>  The rocket texture. </value>
+         */
         public Texture2D RocketTexture
         {
-            get { return rocketTexture; }
+            get { return _rocketTexture; }
             set
             {
-                rocketTexture = value;
-                rocketColorArray = Game1.TextureTo2DArray(rocketTexture);
+                _rocketTexture = value;
+                _rocketColorArray = Game1.TextureTo2DArray(_rocketTexture);
             }
         }
 
+        /**
+         * <summary>    Gets the 2D array of colors representing the rocket's texture. </summary>
+         *
+         * <value>  A 2D array of colors. </value>
+         */
         public Color[,] RocketColorArray
         {
-            get { return rocketColorArray; }
+            get { return _rocketColorArray; }
         }
 
+        /**
+         * <summary>    Gets or sets the rocket scaling. </summary>
+         *
+         * <value>  The rocket scaling. </value>
+         */
         public float RocketScaling
         {
-            get { return rocketScaling; }
-            set { rocketScaling = value; }
+            get { return _rocketScaling; }
+            set { _rocketScaling = value; }
         }
 
+        /**
+         * <summary>    Gets or sets the rocket's smoke texture. </summary>
+         *
+         * <value>  The rocket's smoke texture. </value>
+         */
         public Texture2D SmokeTexture
         {
-            get { return smokeTexture; }
-            set { smokeTexture = value; }
+            get { return _smokeTexture; }
+            set { _smokeTexture = value; }
         }
 
+        /**
+         * <summary>    Gets or sets a list of active smoke particles. </summary>
+         *
+         * <value>  A list of active smoke particles. </value>
+         */
         public List<Vector2> SmokeParticleList
         {
-            get { return smokeParticleList; }
-            set { smokeParticleList = value; }
+            get { return _smokeParticleList; }
+            set { _smokeParticleList = value; }
         }
 
+        /**
+         * <summary>    Gets or sets the smoke scaling. </summary>
+         *
+         * <value>  The smoke scaling. </value>
+         */
         public float SmokeScaling
         {
-            get { return smokeScaling; }
-            set { smokeScaling = value; }
+            get { return _smokeScaling; }
+            set { _smokeScaling = value; }
         }
 
         #endregion

@@ -1,32 +1,56 @@
-﻿using System;
+﻿/**
+// file:	Explosion.cs
+//
+// summary:	Implements the explosion class
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CannonWarz
 {
-    class Explosion
+    /**
+     * <summary>    Explosion class. Generates and keeps track of explosion particles. </summary>
+     */
+    public class Explosion
     {
-         public struct ParticleData
+        /**
+         * <summary>    Particle data structure. </summary>
+         */
+        public struct ParticleData
          {
-             public float birthTime;
-             public float maxAge;
-             public Vector2 orginalPosition;
-             public Vector2 accelaration;
-             public Vector2 direction;
-             public Vector2 position;
-             public float scaling;
-             public Color modColor;
-        }
-        
-        public Explosion(Texture2D explosionParticleTexture)
-        {
-            this.explosionParticleTexture = explosionParticleTexture;
-            particleList = new List<ParticleData>();
+            public float birthTime;
+            public float maxAge;
+            public Vector2 orginalPosition;
+            public Vector2 accelaration;
+            public Vector2 direction;
+            public Vector2 position;
+            public float scaling;
+            public Color modColor;
         }
 
+        /**
+         * <summary>    Constructor for the explosion. </summary>
+         *
+         * <param name="explosionParticleTexture">  The explosion particle texture. </param>
+         */
+        public Explosion(Texture2D explosionParticleTexture)
+        {
+            this._explosionParticleTexture = explosionParticleTexture;
+            _particleList = new List<ParticleData>();
+        }
+
+        /**
+         * <summary>    Adds an explosion on the screen. </summary>
+         *
+         * <param name="explosionPos">      The explosion position. </param>
+         * <param name="numberOfParticles"> Number of particles. </param>
+         * <param name="size">              The size of the explosion. </param>
+         * <param name="maxAge">            The maximum age for the particles. </param>
+         * <param name="gameTime">          Time of the game. </param>
+         */
         public void AddExplosion(Vector2 explosionPos, int numberOfParticles, float size, float maxAge, GameTime gameTime)
         {
             for (int i = 0; i < numberOfParticles; i++)
@@ -35,6 +59,14 @@ namespace CannonWarz
             }
         }
 
+        /**
+         * <summary>    Creates particles for an explosion. </summary>
+         *
+         * <param name="explosionPos">  The explosion position. </param>
+         * <param name="explosionSize"> The size of the explosion. </param>
+         * <param name="maxAge">        The maximum age for the particles. </param>
+         * <param name="gameTime">      Time of the game. </param>
+         */
         private void AddExplosionParticle(Vector2 explosionPos, float explosionSize, float maxAge, GameTime gameTime)
         {
             ParticleData particle = new ParticleData();
@@ -57,28 +89,38 @@ namespace CannonWarz
             particle.direction = displacement * 2.0f;
             particle.accelaration = -particle.direction;  
 
-            particleList.Add(particle);
+            _particleList.Add(particle);
         }
 
         #region --------------------- PRIVATE FIELDS ---------------------
 
-        private Texture2D explosionParticleTexture;
-        private List<ParticleData> particleList;
+        private Texture2D _explosionParticleTexture;
+        private List<ParticleData> _particleList;
 
         #endregion
 
         #region ----------------------- PROPERTIES -----------------------
 
+        /**
+         * <summary>    Gets or sets the explosionparticle texture. </summary>
+         *
+         * <value>  The explosionparticle texture. </value>
+         */
         public Texture2D ExplosionparticleTexture
         {
-            get { return explosionParticleTexture; }
-            set { explosionParticleTexture = value; }
+            get { return _explosionParticleTexture; }
+            set { _explosionParticleTexture = value; }
         }
 
+        /**
+         * <summary>    Gets or sets the list of currently active particles. </summary>
+         *
+         * <value>  A List of currently active particles. </value>
+         */
         public List<ParticleData> ParticleList
         {
-            get { return particleList; }
-            set { particleList = value; }
+            get { return _particleList; }
+            set { _particleList = value; }
         }
 
         #endregion

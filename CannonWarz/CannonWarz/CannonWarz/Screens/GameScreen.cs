@@ -1,15 +1,28 @@
-﻿using System;
+﻿/**
+// file:	Screens\GameScreen.cs
+//
+// summary:	Implements the game screen class
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace CannonWarz.Screens
 {
-    class GameScreen : AbsScreen
+    /**
+     * <summary>    Game screen. This is where single player game's logic is found. </summary>
+     */
+    public class GameScreen : AbsScreen
     {
+        /**
+         * <summary>    Constructor. </summary>
+         *
+         * <param name="game">          The game instance. </param>
+         * <param name="spriteBatch">   The sprite batch used to draw. </param>
+         */
         public GameScreen(Game1 game, SpriteBatch spriteBatch)
             : base(game, spriteBatch)
         {
@@ -17,42 +30,54 @@ namespace CannonWarz.Screens
             CurrentPlayer = 0;
 
             RocketIsFlying = false;
-            instantiatedRocketList = new List<Rocket>();
+            _instantiatedRocketList = new List<Rocket>();
 
             CompassScaling = 0.25f;
             PinScaling = 0.25f;
 
-            explosionList = new List<Explosion>();
+            _explosionList = new List<Explosion>();
         }
 
+        /**
+         * <summary>    Called when the screen is back on top of the game screen manager's stack. </summary>
+         */
         public override void Activate()
         {
-
         }
 
+        /**
+         * <summary>    Called when the screen is no longer on top of the game screen manager's stack. </summary>
+         */
         public override void Deactivate()
         {
-
         }
 
+        /**
+         * <summary>    Initializes the screen by creating the terrain and the players. </summary>
+         */
         public override void Initialize()
         {
             // We create the terrain object and then create the terrain contour
-            terrain = new Terrain(Game, Game.GroundTexture);
-            terrain.GenerateTerrainContour();
+            _terrain = new Terrain(Game, Game.GroundTexture);
+            _terrain.GenerateTerrainContour();
 
             // We generate the wind direction for the first player
-            terrain.GenerateWindDirection();
+            _terrain.GenerateWindDirection();
 
             // We create the players
             CreatePlayers(Game.CarriageTexture, Game.CannonTexture, Game.LifeBarTexture, Game.GreenBarTexture, Game.YellowBarTexture, Game.RedBarTexture);
 
             // This must be call after CreatePlayers() as terrain.TerrainContour is modified by CreateForeground()
-            terrain.CreateForeground(Game.GraphicsDevice);
+            _terrain.CreateForeground(Game.GraphicsDevice);
             
             base.Initialize();
         }
 
+        /**
+         * <summary>    Updates the screen's logic. </summary>
+         *
+         * <param name="gameTime">  Time of the game. </param>
+         */
         public override void Update(GameTime gameTime)
         {
             List<Explosion> explosionToDelete = new List<Explosion>();
@@ -65,7 +90,7 @@ namespace CannonWarz.Screens
                 CheckCollisions(gameTime);
             }
 
-            foreach (Explosion explosion in explosionList)
+            foreach (Explosion explosion in _explosionList)
             {
                 if (explosion.ParticleList.Count > 0)
                 {
@@ -82,12 +107,24 @@ namespace CannonWarz.Screens
             // explosionList while iterating in it
             foreach (Explosion explosion in explosionToDelete)
             {
-                explosionList.Remove(explosion);
+                _explosionList.Remove(explosion);
+            }
+
+            // If the game is finished, we push the win screen
+            if (Finished)
+            {
+                GameScreenManager gameScreenManager = GameScreenManager.Instance;
+                gameScreenManager.Push(new WinScreen(Game, SpriteBatch, PlayersArray[CurrentPlayer]));
             }
         }
 
         #region -------------------- UPDATE FUNCTIONS --------------------
 
+        /**
+         * <summary>    Check keyboard keys state. </summary>
+         *
+         * <param name="gameTime">  Time of the game. </param>
+         */
         protected override void CheckKeyboardKeysState(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -139,11 +176,14 @@ namespace CannonWarz.Screens
                     RocketIsFlying = true;
 
                     Rocket rocket = new Rocket(Game.RocketTexture, Game.SmokeTexture, PlayersArray[CurrentPlayer].Position, PlayersArray[CurrentPlayer].Angle, PlayersArray[CurrentPlayer].Power);
-                    instantiatedRocketList.Add(rocket);
+                    _instantiatedRocketList.Add(rocket);
                 }
             }
         }
-        
+
+        /**
+         * <summary>    Updates the rocket's position and direction and creates smoke particles. </summary>
+         */
         private void UpdateRocket()
         {
             if (RocketIsFlying)
@@ -151,10 +191,10 @@ namespace CannonWarz.Screens
                 // Gravity effect on the rocket
                 Vector2 gravity = new Vector2(0, 1);
 
-                foreach (Rocket rocket in instantiatedRocketList)
+                foreach (Rocket rocket in _instantiatedRocketList)
                 {
                     rocket.RocketDirection += gravity / 10.0f;
-                    rocket.RocketDirection += terrain.WindDirection;
+                    rocket.RocketDirection += _terrain.WindDirection;
                     rocket.RocketPosition += rocket.RocketDirection;
 
                     // We update the angle of the rocket accordingly
@@ -165,12 +205,20 @@ namespace CannonWarz.Screens
             }
         }
 
+        /**
+         * <summary>    
+         *  Updates the position of each of the explosion particles on the screen and deletes them if 
+         *  they have exceeded their lifetime.   
+         * </summary>
+         *
+         * <param name="gameTime">  Time of the game. </param>
+         */
         private void UpdateExplosionParticles(GameTime gameTime)
         {
             float now = (float)gameTime.TotalGameTime.TotalMilliseconds;
             List<Explosion> explosionToDelete = new List<Explosion>();
 
-            foreach (Explosion explosion in explosionList)
+            foreach (Explosion explosion in _explosionList)
             {
                 // We scroll through the list backward so that we do not skip items if we delete some items
                 for (int i = explosion.ParticleList.Count - 1; i >= 0; i--)
@@ -208,11 +256,19 @@ namespace CannonWarz.Screens
             }
         }
 
+        /**
+         * <summary>    
+         *  Handles each case of collisions: with the terrain, with the player and "rocket out 
+         *  of screen" collisions. 
+         * </summary>
+         *
+         * <param name="gameTime">  Time of the game. </param>
+         */
         private void CheckCollisions(GameTime gameTime)
         {
             List<Rocket> rocketsToKill = new List<Rocket>();
 
-            foreach (Rocket rocket in instantiatedRocketList)
+            foreach (Rocket rocket in _instantiatedRocketList)
             {
                 Vector2 terrainCollisionPoint = CheckTerrainCollision(rocket);
                 Vector2 playerCollisionPoint = CheckPlayersCollision(rocket);
@@ -260,10 +316,23 @@ namespace CannonWarz.Screens
             // We delete each rocket that had a collision
             foreach (Rocket rocket in rocketsToKill)
             {
-                instantiatedRocketList.Remove(rocket);
+                _instantiatedRocketList.Remove(rocket);
             }
         }
 
+        /**
+         * <summary>    Verifies if two textures collide. </summary>
+         *
+         * <param name="textureImage1"> The first 2D color array. </param>
+         * <param name="matrixImage1">  The first matrix. </param>
+         * <param name="textureImage2"> The second 2D color array. </param>
+         * <param name="matrixImage2">  The second matrix. </param>
+         *
+         * <returns>    
+         *  The position (X and Y coordinates) on the screen where the collision occurs, or (-1,-1) 
+         *  if there is no collisions.              
+         * </returns>
+         */
         private Vector2 TexturesCollide(Color[,] textureImage1, Matrix matrixImage1, Color[,] textureImage2, Matrix matrixImage2)
         {
             Matrix mat1to2 = matrixImage1 * Matrix.Invert(matrixImage2);
@@ -302,6 +371,19 @@ namespace CannonWarz.Screens
             return new Vector2(-1, -1);
         }
 
+        /**
+         * <summary>    
+         *  Creates the matrix to use to verify if there is a collision with the terrain and passes 
+         *  it to TexturesCollide().               
+         * </summary>
+         *
+         * <param name="rocket">    The rocket we wish to verify if a collision occurs with. </param>
+         *
+         * <returns>    
+         *  The position (X and Y coordinates) on the screen where the collision occurs, or (-1,-1) 
+         *  if there is no collisions.              
+         * </returns>
+         */
         private Vector2 CheckTerrainCollision(Rocket rocket)
         {
             Matrix rocketMat = Matrix.CreateTranslation(-42, -240, 0) *
@@ -310,11 +392,24 @@ namespace CannonWarz.Screens
                 Matrix.CreateTranslation(rocket.RocketPosition.X, rocket.RocketPosition.Y, 0);
             Matrix terrainMat = Matrix.Identity;
 
-            Vector2 terrainCollisionPoint = TexturesCollide(rocket.RocketColorArray, rocketMat, terrain.ForegroundColorArray, terrainMat);
+            Vector2 terrainCollisionPoint = TexturesCollide(rocket.RocketColorArray, rocketMat, _terrain.ForegroundColorArray, terrainMat);
 
             return terrainCollisionPoint;
         }
 
+        /**
+         * <summary>    
+         *  Creates the matrix to use to verify if there is a collision with the cannon or the carriage 
+         *  and passes it to TexturesCollide().               
+         * </summary>
+         *
+         * <param name="rocket">    The rocket we wish to verify if a collision occurs with. </param>
+         *
+         * <returns>    
+         *  The position (X and Y coordinates) on the screen where the collision occurs, or (-1,-1) 
+         *  if there is no collisions.              
+         * </returns>
+         */
         private Vector2 CheckPlayersCollision(Rocket rocket)
         {
             Matrix rocketMat = Matrix.CreateTranslation(-42, -240, 0) *
@@ -325,7 +420,7 @@ namespace CannonWarz.Screens
             // We verify if there is a collision between the rocket and each player that is alive and not the current player
             for (int i = 0; i < NumberOfPlayers; i++)
             {
-                HumanPlayer player = PlayersArray[i];
+                AbsPlayer player = PlayersArray[i];
                 if (player.IsAlive)
                 {
                     if (i != CurrentPlayer)
@@ -380,6 +475,13 @@ namespace CannonWarz.Screens
             return new Vector2(-1, -1);
         }
 
+        /**
+         * <summary>    Checks if the rocket is out of screen. </summary>
+         *
+         * <param name="rocket">    The rocket we wish to verify if is out of screen. </param>
+         *
+         * <returns>    true if it is out of screen, false if it is not. </returns>
+         */
         private bool CheckRocketOutOfScreen(Rocket rocket)
         {
             bool rocketOutOfScreen = rocket.RocketPosition.Y > Game.ScreenHeight;
@@ -391,13 +493,18 @@ namespace CannonWarz.Screens
 
         #endregion
 
+        /**
+         * <summary>    Draws the screen components on the screen. </summary>
+         *
+         * <param name="gameTime">  Time of the game. </param>
+         */
         public override void Draw(GameTime gameTime)
         {
             SpriteBatch.Begin();
             DrawScenery();
             DrawPlayers();
             DrawScreenOverlay();
-            foreach (Rocket rocket in instantiatedRocketList)
+            foreach (Rocket rocket in _instantiatedRocketList)
             {
                 DrawRocket(rocket);
                 DrawSmoke(rocket);
@@ -412,12 +519,18 @@ namespace CannonWarz.Screens
 
         #region --------------------- DRAW FUNCTIONS ---------------------
 
+        /**
+         * <summary>    Draws the terrain foreground scenery. </summary>
+         */
         private void DrawScenery()
         {
             Rectangle screenRectangle = new Rectangle(0, 0, Game.ScreenWidth, Game.ScreenHeight);
-            SpriteBatch.Draw(terrain.ForegroundTexture, screenRectangle, Color.White);
+            SpriteBatch.Draw(_terrain.ForegroundTexture, screenRectangle, Color.White);
         }
 
+        /**
+         * <summary>    Draws players (cannons, carriages and HP bars). </summary>
+         */
         private void DrawPlayers()
         {
             Vector2 cannonOrigin = new Vector2(11, 50); // Rotation point for the cannon
@@ -463,6 +576,9 @@ namespace CannonWarz.Screens
             }
         }
 
+        /**
+         * <summary>    Draws the screen overlay. </summary>
+         */
         private void DrawScreenOverlay()
         {
             // We draw the power and angle strings
@@ -473,7 +589,7 @@ namespace CannonWarz.Screens
 
             // We draw the compass and the pin
             Vector2 pinOrigin = new Vector2(90, 45); // Rotation point for the pin
-            float windAngle = (float)((-Math.PI / 2) + Math.Atan2(terrain.WindDirection.X, -terrain.WindDirection.Y));
+            float windAngle = (float)((-Math.PI / 2) + Math.Atan2(_terrain.WindDirection.X, -_terrain.WindDirection.Y));
             // TODO: Make the pin scale in function of the power of the wind
             //float pinScale = (float)(terrain.WindDirection.Y / Math.Cos(windAngle));
             float compassPosX = Game.ScreenWidth - 100;
@@ -485,6 +601,11 @@ namespace CannonWarz.Screens
             SpriteBatch.Draw(Game.PinTexture, new Vector2(pinPosX, pinPosY), null, PlayersArray[CurrentPlayer].Color, windAngle, pinOrigin, PinScaling/*pinScale*/, SpriteEffects.None, 1);
         }
 
+        /**
+         * <summary>    Draws the rocket. </summary>
+         *
+         * <param name="rocket">    The rocket we wish to draw. </param>
+         */
         private void DrawRocket(Rocket rocket)
         {
             if (RocketIsFlying)
@@ -493,6 +614,11 @@ namespace CannonWarz.Screens
             }
         }
 
+        /**
+         * <summary>    Draws the rocket's smoke. </summary>
+         *
+         * <param name="rocket">    The rocket we wish to draw the smoke from. </param>
+         */
         private void DrawSmoke(Rocket rocket)
         {
             foreach (Vector2 smokePos in rocket.SmokeParticleList)
@@ -501,9 +627,12 @@ namespace CannonWarz.Screens
             }
         }
 
+        /**
+         * <summary>    Draws the explosions when a collision occurs with the rocket. </summary>
+         */
         private void DrawExplosion()
         {
-            foreach (Explosion explosion in explosionList)
+            foreach (Explosion explosion in _explosionList)
             {
                 for (int i = 0; i < explosion.ParticleList.Count; i++)
                 {
@@ -516,6 +645,9 @@ namespace CannonWarz.Screens
 
         #endregion
 
+        /**
+         * <summary>    Verifies if the shot's power is out of range. If it is, it adjusts it. </summary>
+         */
         private void VerifyPowerRange()
         {
             if (PlayersArray[CurrentPlayer].Power > 1000)
@@ -528,6 +660,9 @@ namespace CannonWarz.Screens
             }
         }
 
+        /**
+         * <summary>    Verifies if the shot's angle is out of range. If it is, it adjusts it. </summary>
+         */
         private void VerifyAngleRange()
         {
             if (PlayersArray[CurrentPlayer].Angle > MathHelper.PiOver2)
@@ -540,6 +675,16 @@ namespace CannonWarz.Screens
             }
         }
 
+        /**
+         * <summary>    Creates the players, calls PlacePlayer() and flattens the terrain under the players. </summary>
+         *
+         * <param name="carriageTexture">   The carriage texture. </param>
+         * <param name="cannonTexture">     The cannon texture. </param>
+         * <param name="lifeBarTexture">    The life bar texture. </param>
+         * <param name="greenBarTexture">   The green bar texture. </param>
+         * <param name="yellowBarTexture">  The yellow bar texture. </param>
+         * <param name="redBarTexture">     The red bar texture. </param>
+         */
         private void CreatePlayers(Texture2D carriageTexture, Texture2D cannonTexture, Texture2D lifeBarTexture, Texture2D greenBarTexture, Texture2D yellowBarTexture, Texture2D redBarTexture)
         {
             Color[] playerColors = new Color[10];
@@ -561,13 +706,16 @@ namespace CannonWarz.Screens
                 PlayersArray[i] = new HumanPlayer(playerColors[i], carriageTexture, cannonTexture, lifeBarTexture, greenBarTexture, yellowBarTexture, redBarTexture);
 
                 // We set his position
-                PlayersArray[i].PlacePlayer(NumberOfPlayers, i, Game.ScreenWidth, terrain);
+                PlayersArray[i].PlacePlayer(NumberOfPlayers, i, Game.ScreenWidth, _terrain);
             }
 
             // We flatten the ground under their positions
-            terrain.FlattenTerrainBelowPlayers(PlayersArray);
+            _terrain.FlattenTerrainBelowPlayers(PlayersArray);
         }
 
+        /**
+         * <summary>    Switches to the next player's turn and calls GenerateWindDirection(). </summary>
+         */
         private void NextPlayer()
         {
             // We increment the current player
@@ -583,63 +731,133 @@ namespace CannonWarz.Screens
             }
 
             // We change the wind direction for the next player
-            terrain.GenerateWindDirection();
+            _terrain.GenerateWindDirection();
         }
 
+        /**
+         * <summary>    Creates an explosion and adds it to the explosion list. </summary>
+         *
+         * <param name="playerCollisionPoint">  The player's collision point. </param>
+         * <param name="numberOfParticles">     Number of particles to generate. </param>
+         * <param name="size">                  The size of the explosion. </param>
+         * <param name="maxAge">                The particles' maximum age. </param>
+         * <param name="gameTime">              Time of the game. </param>
+         */
         private void CreateExplosion(Vector2 playerCollisionPoint, int numberOfParticles, float size, float maxAge, GameTime gameTime)
         {
             Explosion explosion = new Explosion(Game.ExplosionParticleTextures);
-            explosionList.Add(explosion);
+            _explosionList.Add(explosion);
 
             explosion.AddExplosion(playerCollisionPoint, numberOfParticles, size, maxAge, gameTime);
         }
 
         #region --------------------- PRIVATE FIELDS ---------------------
 
-        private Terrain terrain;
+        private Terrain _terrain;
 
-        private List<Rocket> instantiatedRocketList;
+        private List<Rocket> _instantiatedRocketList;
 
-        private List<Explosion> explosionList;
+        private List<Explosion> _explosionList;
 
         #endregion
 
         #region ----------------------- PROPERTIES -----------------------
 
+        /**
+         * <summary>    Gets or sets the compass' pin scaling. </summary>
+         *
+         * <value>  The compass' pin scaling. </value>
+         */
         public float PinScaling
         {
             get;
             private set;
         }
 
+        /**
+         * <summary>    Gets or sets the compass scaling. </summary>
+         *
+         * <value>  The compass scaling. </value>
+         */
         public float CompassScaling
         {
             get;
             private set;
         }
-        
+
+        /**
+         * <summary>    Gets or sets a value indicating whether the rocket is flying. </summary>
+         *
+         * <value>  true if rocket is flying, false if not. </value>
+         */
         public bool RocketIsFlying
         {
             get;
             set;
         }
 
-        public HumanPlayer[] PlayersArray
+        /**
+         * <summary>    Gets or sets an array of active players. </summary>
+         *
+         * <value>  An Array of active players. </value>
+         */
+        public AbsPlayer[] PlayersArray
         {
             get;
             set;
         }
 
+        /**
+         * <summary>    Gets or sets the number of players to be drawn/updated. </summary>
+         *
+         * <value>  The total number of players. </value>
+         */
         public int NumberOfPlayers
         {
             get;
             set;
         }
 
+        /**
+         * <summary>    Gets or sets the index of the current player. </summary>
+         *
+         * <value>  The index of the current player. </value>
+         */
         public int CurrentPlayer
         {
             get;
             set;
+        }
+
+        /**
+         * <summary>    Gets a value indicating whether the game is finished. </summary>
+         *
+         * <value>  true if finished, false if not. </value>
+         */
+        public bool Finished
+        {
+            get
+            {
+                int alivePlayer = 0;
+
+                foreach (AbsPlayer player in PlayersArray)
+                {
+                    if (player.IsAlive)
+                    {
+                        alivePlayer++;
+                    }
+                }
+
+                if (alivePlayer == 1)
+                {
+                    return true;
+                }
+
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         #endregion

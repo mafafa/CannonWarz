@@ -5,7 +5,7 @@ This is a small 2D cannon game I made with the XNA framework by following a tuto
 
 Features for now include:
 - Randomly generated maps each time you open the game (though the cannons' position are fixed).
-- Randomly generated wind that changes and the end of each player's turn.
+- Randomly generated wind that changes at the end of each player's turn.
 - Particles (when the rocket explodes)
 
 Controls (until I make them configurable)

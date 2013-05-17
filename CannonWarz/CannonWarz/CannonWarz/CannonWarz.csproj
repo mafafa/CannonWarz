@@ -121,6 +121,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Screens\MenuComponent.cs" />
     <Compile Include="Screens\PauseScreen.cs" />
+    <Compile Include="Screens\WinScreen.cs" />
     <Compile Include="Terrain.cs" />
   </ItemGroup>
   <ItemGroup>
