@@ -27,18 +27,18 @@ namespace CannonWarz.Screens
         {
             _oldState = Keyboard.GetState();
             
-            MenuComponents = new MenuComponent[3];
+            MenuComponents = new MenuButton[3];
 
-            MenuComponent resumeButton = new MenuComponent(this, "Resume", SpriteBatch, Game.MenuFont, true);
-            MenuComponent mainMenuButton = new MenuComponent(this, "Main Menu", SpriteBatch, Game.MenuFont, true);
-            MenuComponent exitButton = new MenuComponent(this, "Exit", SpriteBatch, Game.MenuFont, true);
+            MenuButton resumeButton = new MenuButton(this, "Resume", SpriteBatch, Game.MenuFont, true);
+            MenuButton mainMenuButton = new MenuButton(this, "Main Menu", SpriteBatch, Game.MenuFont, true);
+            MenuButton exitButton = new MenuButton(this, "Exit", SpriteBatch, Game.MenuFont, true);
             MenuComponents[0] = resumeButton;
             MenuComponents[1] = mainMenuButton;
             MenuComponents[2] = exitButton;
 
             // We set the position of the buttons
             Vector2 position = new Vector2(0f, Game.GraphicsDevice.Viewport.Height / 3);    // The starting height of the components is the third of the screen
-            foreach (MenuComponent component in MenuComponents)
+            foreach (MenuButton component in MenuComponents)
             {
                 position.X = (Game.GraphicsDevice.Viewport.Width / 2);
                 component.Position = position;
@@ -72,7 +72,7 @@ namespace CannonWarz.Screens
          */
         public override void Update(GameTime gameTime)
         {          
-            foreach (MenuComponent component in MenuComponents)
+            foreach (MenuButton component in MenuComponents)
             {
                 component.Update(gameTime);
             }
@@ -172,7 +172,7 @@ namespace CannonWarz.Screens
 
             SpriteBatch.End();
             
-            foreach (MenuComponent component in MenuComponents)
+            foreach (MenuButton component in MenuComponents)
             {
                 component.Draw(gameTime);
             }
@@ -192,7 +192,7 @@ namespace CannonWarz.Screens
          *
          * <value>  The array of menu components. </value>
          */
-        public MenuComponent[] MenuComponents
+        public MenuButton[] MenuComponents
         {
             get;
             private set;

@@ -27,16 +27,18 @@ namespace CannonWarz.Screens
         {
             _oldState = Keyboard.GetState();
 
-            MenuComponents = new MenuComponent[2];
+            MenuComponents = new MenuButton[3];
 
-            MenuComponent newGameButton = new MenuComponent(this, "New Game", SpriteBatch, Game.MenuFont, true);
-            MenuComponent exitButton = new MenuComponent(this, "Exit", SpriteBatch, Game.MenuFont, true);
-            MenuComponents[0] = newGameButton;
-            MenuComponents[1] = exitButton;
+            MenuButton newSingleGameButton = new MenuButton(this, "Single Player Game", SpriteBatch, Game.MenuFont, true);
+            MenuButton newLocalMultiGameButton = new MenuButton(this, "Local Multi Player Game", SpriteBatch, Game.MenuFont, true);
+            MenuButton exitButton = new MenuButton(this, "Exit", SpriteBatch, Game.MenuFont, true);
+            MenuComponents[0] = newSingleGameButton;
+            MenuComponents[1] = newLocalMultiGameButton;
+            MenuComponents[2] = exitButton;
 
             // We set the position of the buttons
             Vector2 position = new Vector2(0f, Game.GraphicsDevice.Viewport.Height / 3);    // The starting height of the components is the third of the screen
-            foreach (MenuComponent component in MenuComponents)
+            foreach (MenuButton component in MenuComponents)
             {
                 position.X = (Game.GraphicsDevice.Viewport.Width / 2);
                 component.Position = position;
@@ -44,7 +46,7 @@ namespace CannonWarz.Screens
             }
 
             // The first button is selected by default
-            newGameButton.Selected = true;
+            newSingleGameButton.Selected = true;
 
             _activeComponentIndex = 0;
         }
@@ -70,7 +72,7 @@ namespace CannonWarz.Screens
          */
         public override void Update(GameTime gameTime)
         {
-            foreach (MenuComponent component in MenuComponents)
+            foreach (MenuButton component in MenuComponents)
             {
                 component.Update(gameTime);
             }
@@ -121,11 +123,18 @@ namespace CannonWarz.Screens
             {
                 switch (MenuComponents[_activeComponentIndex].ButtonName)
                 {
-                    case "New Game":
+                    case "Single Player Game":
                         GameScreenManager gameScreenManager = GameScreenManager.Instance;
                         // We pop the main menu
                         gameScreenManager.Pop();
-                        gameScreenManager.Push(new GameScreen(Game, SpriteBatch));
+                        gameScreenManager.Push(new SinglePlayerGameScreen(Game, SpriteBatch));
+                        break;
+
+                    case "Local Multi Player Game":
+                        gameScreenManager = GameScreenManager.Instance;
+                        // We pop the main menu
+                        gameScreenManager.Pop();
+                        gameScreenManager.Push(new LocalMultiGameScreen(Game, SpriteBatch));
                         break;
 
                     case "Exit":
@@ -158,7 +167,7 @@ namespace CannonWarz.Screens
 
             SpriteBatch.End();
 
-            foreach (MenuComponent component in MenuComponents)
+            foreach (MenuButton component in MenuComponents)
             {
                 component.Draw(gameTime);
             }
@@ -178,7 +187,7 @@ namespace CannonWarz.Screens
          *
          * <value>  The array of menu components. </value>
          */
-        public MenuComponent[] MenuComponents
+        public MenuButton[] MenuComponents
         {
             get;
             private set;

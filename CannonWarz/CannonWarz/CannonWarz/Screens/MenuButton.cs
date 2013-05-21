@@ -1,7 +1,7 @@
 ﻿/**
-// file:	Screens\MenuComponent.cs
+// file:	Screens\MenuButton.cs
 //
-// summary:	Implements the menu component class
+// summary:	Implements the menu button class
  */
 
 using System;
@@ -11,9 +11,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace CannonWarz.Screens
 {
     /**
-     * <summary>    Menu component class. A menu component is the basic button found in any menu type screen. </summary>
+     * <summary>    Menu button class. A menu button is the basic button found in any menu type screen. </summary>
      */
-    public class MenuComponent
+    public class MenuButton
     {
         /**
          * <summary>    Constructor. </summary>
@@ -24,7 +24,7 @@ namespace CannonWarz.Screens
          * <param name="font">          The font used to draw the string. </param>
          * <param name="popIn">         true to enable the pop in effect, false otherwise. </param>
          */
-        public MenuComponent(AbsScreen owner, String buttonName, SpriteBatch spriteBatch, SpriteFont font, bool popIn)
+        public MenuButton(AbsScreen owner, String buttonName, SpriteBatch spriteBatch, SpriteFont font, bool popIn)
         {
             ButtonName = buttonName;
             Font = font;
@@ -55,7 +55,7 @@ namespace CannonWarz.Screens
         }
 
         /**
-         * <summary>    Updates the menu component. Pop in and pulsate logic is found here. </summary>
+         * <summary>    Updates the menu button. Pop in and pulsate logic is found here. </summary>
          *
          * <param name="gameTime">  Time of the game. </param>
          */
@@ -72,14 +72,14 @@ namespace CannonWarz.Screens
             {
                 double time = gameTime.TotalGameTime.TotalSeconds;
 
-                // Pulsate the size of the selected menu component
+                // Pulsate the size of the selected menu button
                 float pulsate = (float)Math.Sin(time * 6) + 1;
                 _selectedButtonScale = 1 + pulsate * 0.05f;
             }
         }
 
         /**
-         * <summary>    Draws the menu component. </summary>
+         * <summary>    Draws the menu button. </summary>
          *
          * <param name="gameTime">  Time of the game. </param>
          */
@@ -110,9 +110,9 @@ namespace CannonWarz.Screens
         #region ----------------------- PROPERTIES -----------------------
 
         /**
-         * <summary>    Gets or sets the owner of the menu component. </summary>
+         * <summary>    Gets or sets the owner of the menu button. </summary>
          *
-         * <value>  The owner of the menu component. </value>
+         * <value>  The owner of the menu button. </value>
          */
         public AbsScreen Owner
         {
@@ -136,7 +136,7 @@ namespace CannonWarz.Screens
 
         /**
          * <summary>    
-         *  Gets or sets a value indicating whether the component is currently 
+         *  Gets or sets a value indicating whether the button is currently 
          *  selected. 
          * </summary>
          *
@@ -149,7 +149,7 @@ namespace CannonWarz.Screens
         }
 
         /**
-         * <summary>    Gets or sets the color of the component if it is unselected. </summary>
+         * <summary>    Gets or sets the color of the button if it is unselected. </summary>
          *
          * <value>  The color of the button if it is unselected. </value>
          */
@@ -160,9 +160,9 @@ namespace CannonWarz.Screens
         }
 
         /**
-         * <summary>    Gets or sets the color of the component if it is selected. </summary>
+         * <summary>    Gets or sets the color of the button if it is selected. </summary>
          *
-         * <value>  The color of the component if it is selected. </value>
+         * <value>  The color of the button if it is selected. </value>
          */
         public Color SelectedColor
         {
@@ -171,9 +171,9 @@ namespace CannonWarz.Screens
         }
 
         /**
-         * <summary>    Gets or sets the position of the component. </summary>
+         * <summary>    Gets or sets the position of the button. </summary>
          *
-         * <value>  The position of the component. </value>
+         * <value>  The position of the button. </value>
          */
         public Vector2 Position
         {
@@ -244,9 +244,9 @@ namespace CannonWarz.Screens
         }
 
         /**
-         * <summary>    Gets or sets the sprite batch used to draw the component. </summary>
+         * <summary>    Gets or sets the sprite batch used to draw the button. </summary>
          *
-         * <value>  The sprite batch used to draw the component. </value>
+         * <value>  The sprite batch used to draw the button. </value>
          */
         public SpriteBatch SpriteBatch
         {

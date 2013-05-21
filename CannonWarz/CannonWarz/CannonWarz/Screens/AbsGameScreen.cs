@@ -1,29 +1,16 @@
-﻿/**
-// file:	Screens\GameScreen.cs
-//
-// summary:	Implements the game screen class
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace CannonWarz.Screens
 {
-    /**
-     * <summary>    Game screen. This is where single player game's logic is found. </summary>
-     */
-    public class GameScreen : AbsScreen
+    public abstract class AbsGameScreen : AbsScreen
     {
-        /**
-         * <summary>    Constructor. </summary>
-         *
-         * <param name="game">          The game instance. </param>
-         * <param name="spriteBatch">   The sprite batch used to draw. </param>
-         */
-        public GameScreen(Game1 game, SpriteBatch spriteBatch)
+        protected AbsGameScreen(Game1 game, SpriteBatch spriteBatch)
             : base(game, spriteBatch)
         {
             NumberOfPlayers = 4;
@@ -69,7 +56,7 @@ namespace CannonWarz.Screens
 
             // This must be call after CreatePlayers() as terrain.TerrainContour is modified by CreateForeground()
             _terrain.CreateForeground(Game.GraphicsDevice);
-            
+
             base.Initialize();
         }
 
@@ -184,7 +171,7 @@ namespace CannonWarz.Screens
         /**
          * <summary>    Updates the rocket's position and direction and creates smoke particles. </summary>
          */
-        private void UpdateRocket()
+        protected void UpdateRocket()
         {
             if (RocketIsFlying)
             {
@@ -213,7 +200,7 @@ namespace CannonWarz.Screens
          *
          * <param name="gameTime">  Time of the game. </param>
          */
-        private void UpdateExplosionParticles(GameTime gameTime)
+        protected void UpdateExplosionParticles(GameTime gameTime)
         {
             float now = (float)gameTime.TotalGameTime.TotalMilliseconds;
             List<Explosion> explosionToDelete = new List<Explosion>();
@@ -264,7 +251,7 @@ namespace CannonWarz.Screens
          *
          * <param name="gameTime">  Time of the game. </param>
          */
-        private void CheckCollisions(GameTime gameTime)
+        protected void CheckCollisions(GameTime gameTime)
         {
             List<Rocket> rocketsToKill = new List<Rocket>();
 
@@ -333,7 +320,7 @@ namespace CannonWarz.Screens
          *  if there is no collisions.              
          * </returns>
          */
-        private Vector2 TexturesCollide(Color[,] textureImage1, Matrix matrixImage1, Color[,] textureImage2, Matrix matrixImage2)
+        protected Vector2 TexturesCollide(Color[,] textureImage1, Matrix matrixImage1, Color[,] textureImage2, Matrix matrixImage2)
         {
             Matrix mat1to2 = matrixImage1 * Matrix.Invert(matrixImage2);
             int width1 = textureImage1.GetLength(0);
@@ -384,7 +371,7 @@ namespace CannonWarz.Screens
          *  if there is no collisions.              
          * </returns>
          */
-        private Vector2 CheckTerrainCollision(Rocket rocket)
+        protected Vector2 CheckTerrainCollision(Rocket rocket)
         {
             Matrix rocketMat = Matrix.CreateTranslation(-42, -240, 0) *
                 Matrix.CreateRotationZ(rocket.RocketAngle) *
@@ -410,7 +397,7 @@ namespace CannonWarz.Screens
          *  if there is no collisions.              
          * </returns>
          */
-        private Vector2 CheckPlayersCollision(Rocket rocket)
+        protected Vector2 CheckPlayersCollision(Rocket rocket)
         {
             Matrix rocketMat = Matrix.CreateTranslation(-42, -240, 0) *
                 Matrix.CreateRotationZ(rocket.RocketAngle) *
@@ -482,7 +469,7 @@ namespace CannonWarz.Screens
          *
          * <returns>    true if it is out of screen, false if it is not. </returns>
          */
-        private bool CheckRocketOutOfScreen(Rocket rocket)
+        protected bool CheckRocketOutOfScreen(Rocket rocket)
         {
             bool rocketOutOfScreen = rocket.RocketPosition.Y > Game.ScreenHeight;
             rocketOutOfScreen |= rocket.RocketPosition.X < 0;
@@ -522,7 +509,7 @@ namespace CannonWarz.Screens
         /**
          * <summary>    Draws the terrain foreground scenery. </summary>
          */
-        private void DrawScenery()
+        protected void DrawScenery()
         {
             Rectangle screenRectangle = new Rectangle(0, 0, Game.ScreenWidth, Game.ScreenHeight);
             SpriteBatch.Draw(_terrain.ForegroundTexture, screenRectangle, Color.White);
@@ -531,7 +518,7 @@ namespace CannonWarz.Screens
         /**
          * <summary>    Draws players (cannons, carriages and HP bars). </summary>
          */
-        private void DrawPlayers()
+        protected void DrawPlayers()
         {
             Vector2 cannonOrigin = new Vector2(11, 50); // Rotation point for the cannon
 
@@ -579,7 +566,7 @@ namespace CannonWarz.Screens
         /**
          * <summary>    Draws the screen overlay. </summary>
          */
-        private void DrawScreenOverlay()
+        protected void DrawScreenOverlay()
         {
             // We draw the power and angle strings
             int currentAngle = (int)MathHelper.ToDegrees(PlayersArray[CurrentPlayer].Angle);
@@ -606,7 +593,7 @@ namespace CannonWarz.Screens
          *
          * <param name="rocket">    The rocket we wish to draw. </param>
          */
-        private void DrawRocket(Rocket rocket)
+        protected void DrawRocket(Rocket rocket)
         {
             if (RocketIsFlying)
             {
@@ -619,7 +606,7 @@ namespace CannonWarz.Screens
          *
          * <param name="rocket">    The rocket we wish to draw the smoke from. </param>
          */
-        private void DrawSmoke(Rocket rocket)
+        protected void DrawSmoke(Rocket rocket)
         {
             foreach (Vector2 smokePos in rocket.SmokeParticleList)
             {
@@ -630,7 +617,7 @@ namespace CannonWarz.Screens
         /**
          * <summary>    Draws the explosions when a collision occurs with the rocket. </summary>
          */
-        private void DrawExplosion()
+        protected void DrawExplosion()
         {
             foreach (Explosion explosion in _explosionList)
             {
@@ -648,7 +635,7 @@ namespace CannonWarz.Screens
         /**
          * <summary>    Verifies if the shot's power is out of range. If it is, it adjusts it. </summary>
          */
-        private void VerifyPowerRange()
+        protected void VerifyPowerRange()
         {
             if (PlayersArray[CurrentPlayer].Power > 1000)
             {
@@ -663,7 +650,7 @@ namespace CannonWarz.Screens
         /**
          * <summary>    Verifies if the shot's angle is out of range. If it is, it adjusts it. </summary>
          */
-        private void VerifyAngleRange()
+        protected void VerifyAngleRange()
         {
             if (PlayersArray[CurrentPlayer].Angle > MathHelper.PiOver2)
             {
@@ -685,54 +672,12 @@ namespace CannonWarz.Screens
          * <param name="yellowBarTexture">  The yellow bar texture. </param>
          * <param name="redBarTexture">     The red bar texture. </param>
          */
-        private void CreatePlayers(Texture2D carriageTexture, Texture2D cannonTexture, Texture2D lifeBarTexture, Texture2D greenBarTexture, Texture2D yellowBarTexture, Texture2D redBarTexture)
-        {
-            Color[] playerColors = new Color[10];
-            playerColors[0] = Color.Red;
-            playerColors[1] = Color.Green;
-            playerColors[2] = Color.Blue;
-            playerColors[3] = Color.Purple;
-            playerColors[4] = Color.Orange;
-            playerColors[5] = Color.Indigo;
-            playerColors[6] = Color.Yellow;
-            playerColors[7] = Color.SaddleBrown;
-            playerColors[8] = Color.Tomato;
-            playerColors[9] = Color.Turquoise;
-
-            PlayersArray = new HumanPlayer[NumberOfPlayers];
-            for (int i = 0; i < NumberOfPlayers; i++)
-            {
-                // We create the player
-                PlayersArray[i] = new HumanPlayer(playerColors[i], carriageTexture, cannonTexture, lifeBarTexture, greenBarTexture, yellowBarTexture, redBarTexture);
-
-                // We set his position
-                PlayersArray[i].PlacePlayer(NumberOfPlayers, i, Game.ScreenWidth, _terrain);
-            }
-
-            // We flatten the ground under their positions
-            _terrain.FlattenTerrainBelowPlayers(PlayersArray);
-        }
+        protected abstract void CreatePlayers(Texture2D carriageTexture, Texture2D cannonTexture, Texture2D lifeBarTexture, Texture2D greenBarTexture, Texture2D yellowBarTexture, Texture2D redBarTexture);
 
         /**
          * <summary>    Switches to the next player's turn and calls GenerateWindDirection(). </summary>
          */
-        private void NextPlayer()
-        {
-            // We increment the current player
-            CurrentPlayer++;
-
-            // To be sure that we do not go pass the NumberOfPlayers
-            CurrentPlayer = CurrentPlayer % NumberOfPlayers;
-
-            // We do the two last manipulations until we find a player that is alive
-            while (!PlayersArray[CurrentPlayer].IsAlive)
-            {
-                CurrentPlayer = ++CurrentPlayer % NumberOfPlayers;
-            }
-
-            // We change the wind direction for the next player
-            _terrain.GenerateWindDirection();
-        }
+        protected abstract void NextPlayer();
 
         /**
          * <summary>    Creates an explosion and adds it to the explosion list. </summary>
@@ -743,7 +688,7 @@ namespace CannonWarz.Screens
          * <param name="maxAge">                The particles' maximum age. </param>
          * <param name="gameTime">              Time of the game. </param>
          */
-        private void CreateExplosion(Vector2 playerCollisionPoint, int numberOfParticles, float size, float maxAge, GameTime gameTime)
+        protected void CreateExplosion(Vector2 playerCollisionPoint, int numberOfParticles, float size, float maxAge, GameTime gameTime)
         {
             Explosion explosion = new Explosion(Game.ExplosionParticleTextures);
             _explosionList.Add(explosion);
@@ -753,11 +698,11 @@ namespace CannonWarz.Screens
 
         #region --------------------- PRIVATE FIELDS ---------------------
 
-        private Terrain _terrain;
+        protected Terrain _terrain;
 
-        private List<Rocket> _instantiatedRocketList;
+        protected List<Rocket> _instantiatedRocketList;
 
-        private List<Explosion> _explosionList;
+        protected List<Explosion> _explosionList;
 
         #endregion
 
@@ -771,7 +716,7 @@ namespace CannonWarz.Screens
         public float PinScaling
         {
             get;
-            private set;
+            protected set;
         }
 
         /**
@@ -782,7 +727,7 @@ namespace CannonWarz.Screens
         public float CompassScaling
         {
             get;
-            private set;
+            protected set;
         }
 
         /**
