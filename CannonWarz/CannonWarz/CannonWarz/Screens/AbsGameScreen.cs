@@ -175,14 +175,13 @@ namespace CannonWarz.Screens
         {
             if (RocketIsFlying)
             {
-                Vector2 gravity = new Vector2(0, (float)400);   // 400 is the sweet spot value that i have found works best for the gravity
+                Vector2 gravity = new Vector2(0, Terrain.g);
                 Vector2 totalAcceleration = gravity + _terrain.WindDirection;
                 float deltaT = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 foreach (Rocket rocket in _instantiatedRocketList)
                 {
-                    rocket.RocketSpeed += Vector2.Multiply(gravity, deltaT);  // Only changes the Y component
-                    rocket.RocketSpeed += Vector2.Multiply(_terrain.WindDirection, deltaT);   // Only changes the X component
+                    rocket.RocketSpeed += Vector2.Multiply(totalAcceleration, deltaT);
                     rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(totalAcceleration, (float)0.5) * deltaT * deltaT;
 
                     // We update the angle of the rocket accordingly

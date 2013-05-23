@@ -248,6 +248,16 @@ namespace CannonWarz
             get { return _groundColorArray; }
         }
 
+        /**
+         * <summary>    Gets the gravitational constant of the game. </summary>
+         *
+         * <value>  The gravitational contant of the game. </value>
+         */
+        public static float g
+        {
+            get { return 400; } // 400 is the sweetspot that i have found works best
+        }
+
         #endregion
     }
 }
