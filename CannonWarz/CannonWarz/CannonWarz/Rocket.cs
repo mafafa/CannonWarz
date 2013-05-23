@@ -40,8 +40,8 @@ namespace CannonWarz
             // We create a vector "up" and multiply it by a rotation matrix to get the rocket's real direction
             Vector2 up = new Vector2(0, -1);
             Matrix rotMatrix = Matrix.CreateRotationZ(_rocketAngle);
-            _rocketDirection = Vector2.Transform(up, rotMatrix);
-            _rocketDirection *= initPlayerPower / 50.0f;
+            _rocketSpeed = Vector2.Transform(up, rotMatrix);
+            _rocketSpeed *= initPlayerPower;
 
             _rocketScaling = 0.1f;
             
@@ -56,9 +56,9 @@ namespace CannonWarz
          *
          * <param name="rocketTexture"> The rocket texture. </param>
          * <param name="smokeTexture">  The rocket's smoke texture. </param>
-         * <param name="initPosition">  The initial player's position. </param>
-         * <param name="initAngle">     The initial player's shot angle. </param>
-         * <param name="initDirection"> The initial player's shot direction. </param>
+         * <param name="initPosition">  The initial rocket position. </param>
+         * <param name="initAngle">     The initial rocket angle. </param>
+         * <param name="initDirection"> The initial rocket direction. </param>
          */
         public Rocket(Texture2D rocketTexture, Texture2D smokeTexture, Vector2 initPosition, float initAngle, Vector2 initDirection)
         {
@@ -66,7 +66,7 @@ namespace CannonWarz
             _rocketColorArray = Game1.TextureTo2DArray(rocketTexture);
             _rocketPosition = initPosition;
             _rocketAngle = initAngle;
-            _rocketDirection = initDirection;
+            _rocketSpeed = initDirection;
             _rocketScaling = 0.1f;
 
             this._smokeTexture = smokeTexture;
@@ -105,7 +105,7 @@ namespace CannonWarz
         private Texture2D _rocketTexture;
         private Color[,] _rocketColorArray;
         private Vector2 _rocketPosition;
-        private Vector2 _rocketDirection;
+        private Vector2 _rocketSpeed;
         private float _rocketAngle;
         private float _rocketScaling;
 
@@ -134,10 +134,10 @@ namespace CannonWarz
          *
          * <value>  The rocket direction. </value>
          */
-        public Vector2 RocketDirection
+        public Vector2 RocketSpeed
         {
-            get { return _rocketDirection; }
-            set { _rocketDirection = value; }
+            get { return _rocketSpeed; }
+            set { _rocketSpeed = value; }
         }
 
         /**

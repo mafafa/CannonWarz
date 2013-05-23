@@ -73,7 +73,7 @@ namespace CannonWarz.Screens
 
             if (RocketIsFlying)
             {
-                UpdateRocket();
+                UpdateRocket(gameTime);
                 CheckCollisions(gameTime);
             }
 
@@ -171,21 +171,22 @@ namespace CannonWarz.Screens
         /**
          * <summary>    Updates the rocket's position and direction and creates smoke particles. </summary>
          */
-        protected void UpdateRocket()
+        protected void UpdateRocket(GameTime gameTime)
         {
             if (RocketIsFlying)
             {
-                // Gravity effect on the rocket
-                Vector2 gravity = new Vector2(0, 1);
+                Vector2 gravity = new Vector2(0, (float)400);   // 400 is the sweet spot value that i have found works best for the gravity
+                Vector2 totalAcceleration = gravity + _terrain.WindDirection;
+                float deltaT = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 foreach (Rocket rocket in _instantiatedRocketList)
                 {
-                    rocket.RocketDirection += gravity / 10.0f;
-                    rocket.RocketDirection += _terrain.WindDirection;
-                    rocket.RocketPosition += rocket.RocketDirection;
+                    rocket.RocketSpeed += Vector2.Multiply(gravity, deltaT);  // Only changes the Y component
+                    rocket.RocketSpeed += Vector2.Multiply(_terrain.WindDirection, deltaT);   // Only changes the X component
+                    rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(totalAcceleration, (float)0.5) * deltaT * deltaT;
 
                     // We update the angle of the rocket accordingly
-                    rocket.RocketAngle = (float)Math.Atan2(rocket.RocketDirection.X, -rocket.RocketDirection.Y);
+                    rocket.RocketAngle = (float)Math.Atan2(rocket.RocketSpeed.X, -rocket.RocketSpeed.Y);
 
                     rocket.CreateSmokeParticles(3);
                 }
@@ -255,7 +256,7 @@ namespace CannonWarz.Screens
         {
             List<Rocket> rocketsToKill = new List<Rocket>();
 
-            foreach (Rocket rocket in _instantiatedRocketList)
+            foreach (Rocket rocket in _instantiatedRocketList.ToList())
             {
                 Vector2 terrainCollisionPoint = CheckTerrainCollision(rocket);
                 Vector2 playerCollisionPoint = CheckPlayersCollision(rocket);

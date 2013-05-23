@@ -168,7 +168,12 @@ namespace CannonWarz.Screens
                 isAITurn = true;
                 
                 AIPlayer aiPlayer = (AIPlayer)PlayersArray[CurrentPlayer];
-                aiPlayer.PlayTurn(PlayersArray, _terrain.WindDirection);
+                aiPlayer.PlayTurn(PlayersArray, _terrain.WindDirection, this, Game);
+
+                // We create the rocket
+                RocketIsFlying = true;
+                Rocket rocket = new Rocket(Game.RocketTexture, Game.SmokeTexture, PlayersArray[CurrentPlayer].Position, PlayersArray[CurrentPlayer].Angle, PlayersArray[CurrentPlayer].Power);
+                _instantiatedRocketList.Add(rocket);
             }
 
             else

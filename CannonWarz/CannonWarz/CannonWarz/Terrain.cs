@@ -119,7 +119,7 @@ namespace CannonWarz
          */
         public void FlattenTerrainBelowPlayers(AbsPlayer[] playerArray)
         {
-            foreach (HumanPlayer player in playerArray)
+            foreach (AbsPlayer player in playerArray)
             {
                 if (player.IsAlive)
                 {
@@ -141,7 +141,7 @@ namespace CannonWarz
 
             float rads = (float)(randomFactor.NextDouble() * Math.PI * 2);
 
-            WindDirection = new Vector2((float)(Math.Cos(rads) / 50.0f), (float)(Math.Sin(rads) / 50.0f));
+            WindDirection = new Vector2((float)(Math.Cos(rads) * 50.0f), 0);
         }
 
         #region --------------------- PRIVATE FIELDS ---------------------
