@@ -30,52 +30,81 @@ namespace CannonWarz
             {
                 targetPlayerIndex = randomTargetFactor.Next(0, 4);
             }
-            while (targetPlayerIndex == gameScreen.CurrentPlayer);
+            while ((targetPlayerIndex == gameScreen.CurrentPlayer) || (playersArray[targetPlayerIndex].IsAlive == false));
 
             float finalXPos = playersArray[targetPlayerIndex].Position.X;
             float finalYPos = playersArray[targetPlayerIndex].Position.Y;
-            float iniXSpeed = (game.ScreenWidth / gameScreen.NumberOfPlayers);
+            float iniXPos = playersArray[gameScreen.CurrentPlayer].Position.X;
+            float iniYPos = playersArray[gameScreen.CurrentPlayer].Position.Y;
+            //float iniXSpeed = (game.ScreenWidth / gameScreen.NumberOfPlayers);
+            float iniYSpeed = -500;
+            float iniXSpeed = 0;
 
             // If the target is to the left of the AI player
-            if (targetPlayerIndex < gameScreen.CurrentPlayer)
-            {
-                // The X component for the speed is negative when it goes to the left
-                iniXSpeed = -iniXSpeed;
-
-                for (; iniXSpeed >= -1000; iniXSpeed--)
-                {
-                    float t = (finalXPos - Position.X) / (iniXSpeed + windDirection.X);
-                    float iniYSpeed = ((finalYPos - Position.Y) / t) - (Terrain.g * t * (float)0.5);
-                    Power = (float)Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2));
-                    Angle = (float)Math.Atan2(iniYSpeed, iniXSpeed);
-
-                    if ((Angle >= (-Math.PI / 2) && Angle <= 0) &&
-                        (iniYSpeed >= -1000 && iniYSpeed <= 0) &&
-                        Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2)) <= 1000)
-                    {
-                        break;
-                    }
-                }
-            }
+            //if (targetPlayerIndex < gameScreen.CurrentPlayer)
+            //{
+            //    iniXSpeed = (float)((Terrain.g * (finalXPos - iniXPos)) / (-iniYSpeed - Math.Sqrt(Math.Pow(iniYSpeed, 2) - 2 * Terrain.g * (finalYPos - iniYPos))));
+            //}
 
             // If the target is to the right of the AI player
-            else
-            {
-                for (; iniXSpeed <= 1000; iniXSpeed++)
-                {
-                    float t = (finalXPos - Position.X) / (iniXSpeed + windDirection.X);
-                    float iniYSpeed = ((finalYPos - Position.Y) / t) - (Terrain.g * t * (float)0.5);
-                    Power = (float)Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2));
-                    Angle = (float)Math.Atan2(iniYSpeed, iniXSpeed);
+            //else
+            //{
+                iniXSpeed = (float)((Terrain.g * (finalXPos - iniXPos)) / (-iniYSpeed + Math.Sqrt(Math.Pow(iniYSpeed, 2) - 2 * Terrain.g * (finalYPos - iniYPos))));
+            //}
 
-                    if ((Angle >= (-Math.PI / 2) && Angle <= (Math.PI / 2)) &&
-                        iniYSpeed <= 1000 &&
-                        Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2)) <= 1000)
-                    {
-                        break;
-                    }
-                }
-            }
+            Angle = (float)Math.Atan2(iniXSpeed, -iniYSpeed);
+            Power = (float)Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2));
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            //// If the target is to the left of the AI player
+            //if (targetPlayerIndex < gameScreen.CurrentPlayer)
+            //{
+            //    // The X component for the speed is negative when it goes to the left
+            //    iniXSpeed = -iniXSpeed;
+
+            //    for (; iniXSpeed >= -1000; iniXSpeed--)
+            //    {
+            //        float t = (finalXPos - Position.X) / (iniXSpeed/* + windDirection.X*/);
+            //        float iniYSpeed = ((finalYPos - Position.Y) / t) - (Terrain.g * t * (float)0.5);
+            //        Power = (float)Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2));
+            //        Angle = (float)Math.Atan2(iniYSpeed, iniXSpeed);
+
+            //        if ((Angle >= (-Math.PI / 2) && Angle <= 0) &&
+            //            (iniYSpeed >= -1000 && iniYSpeed <= 0) &&
+            //            Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2)) <= 1000)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
+
+            //// If the target is to the right of the AI player
+            //else
+            //{
+            //    for (; iniXSpeed <= 1000; iniXSpeed++)
+            //    {
+            //        float t = (finalXPos - Position.X) / (iniXSpeed/* + windDirection.X*/);
+            //        float iniYSpeed = ((finalYPos - Position.Y) / t) - (Terrain.g * t * (float)0.5);
+            //        Power = (float)Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2));
+            //        Angle = (float)Math.Atan2(iniYSpeed, iniXSpeed);
+
+            //        if ((Angle >= 0 && Angle <= (Math.PI / 2)) &&
+            //            (iniYSpeed >= -1000 && iniYSpeed <= 0) &&
+            //            Math.Sqrt(Math.Pow(iniXSpeed, 2) + Math.Pow(iniYSpeed, 2)) <= 1000)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
         }
 
         public int LastShotUncertaintyValue

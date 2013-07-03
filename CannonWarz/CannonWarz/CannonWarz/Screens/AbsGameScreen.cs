@@ -176,13 +176,16 @@ namespace CannonWarz.Screens
             if (RocketIsFlying)
             {
                 Vector2 gravity = new Vector2(0, Terrain.g);
-                Vector2 totalAcceleration = gravity + _terrain.WindDirection;
+                //Vector2 totalAcceleration = gravity + _terrain.WindDirection;
                 float deltaT = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                float initialSpeed = PlayersArray[CurrentPlayer].Power;
+                float theta = PlayersArray[CurrentPlayer].Angle;
 
                 foreach (Rocket rocket in _instantiatedRocketList)
                 {
-                    rocket.RocketSpeed += Vector2.Multiply(totalAcceleration, deltaT);
-                    rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(totalAcceleration, (float)0.5) * deltaT * deltaT;
+                    rocket.RocketSpeed += Vector2.Multiply(/*totalAcceleration*/gravity, deltaT);
+                    rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(/*totalAcceleration*/gravity, (float)0.5) * deltaT * deltaT;
 
                     // We update the angle of the rocket accordingly
                     rocket.RocketAngle = (float)Math.Atan2(rocket.RocketSpeed.X, -rocket.RocketSpeed.Y);
