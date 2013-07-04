@@ -22,10 +22,10 @@ namespace CannonWarz
          * <param name="rocketTexture">         The rocket texture. </param>
          * <param name="smokeTexture">          The rocket's smoke texture. </param>
          * <param name="initPlayerPosition">    The initial player's position. </param>
-         * <param name="initPlayerAngle">       The initial player's shot angle. </param>
+         * <param name="initPlayerAngle">       The initial player's shot angle in degrees. </param>
          * <param name="initPlayerPower">       The initial player's shot power. </param>
          */
-        public Rocket(Texture2D rocketTexture, Texture2D smokeTexture, Vector2 initPlayerPosition, float initPlayerAngle, float initPlayerPower)
+        public Rocket(Texture2D rocketTexture, Texture2D smokeTexture, Vector2 initPlayerPosition, int initPlayerAngle, float initPlayerPower)
         {
             this._rocketTexture = rocketTexture;
             _rocketColorArray = Game1.TextureTo2DArray(rocketTexture);
@@ -37,9 +37,10 @@ namespace CannonWarz
             
             _rocketAngle = initPlayerAngle;
             
-            // We create a vector "up" and multiply it by a rotation matrix to get the rocket's real direction
+            // We create a vector "up" and multiply it by a rotation 
+            // matrix to get the rocket's real direction
             Vector2 up = new Vector2(0, -1);
-            Matrix rotMatrix = Matrix.CreateRotationZ(_rocketAngle);
+            Matrix rotMatrix = Matrix.CreateRotationZ(MathHelper.ToRadians(_rocketAngle));
             _rocketSpeed = Vector2.Transform(up, rotMatrix);
             _rocketSpeed *= initPlayerPower;
 
@@ -57,10 +58,10 @@ namespace CannonWarz
          * <param name="rocketTexture"> The rocket texture. </param>
          * <param name="smokeTexture">  The rocket's smoke texture. </param>
          * <param name="initPosition">  The initial rocket position. </param>
-         * <param name="initAngle">     The initial rocket angle. </param>
+         * <param name="initAngle">     The initial rocket angle in degrees. </param>
          * <param name="initDirection"> The initial rocket direction. </param>
          */
-        public Rocket(Texture2D rocketTexture, Texture2D smokeTexture, Vector2 initPosition, float initAngle, Vector2 initDirection)
+        public Rocket(Texture2D rocketTexture, Texture2D smokeTexture, Vector2 initPosition, int initAngle, Vector2 initDirection)
         {
             this._rocketTexture = rocketTexture;
             _rocketColorArray = Game1.TextureTo2DArray(rocketTexture);
@@ -106,7 +107,7 @@ namespace CannonWarz
         private Color[,] _rocketColorArray;
         private Vector2 _rocketPosition;
         private Vector2 _rocketSpeed;
-        private float _rocketAngle;
+        private int _rocketAngle;
         private float _rocketScaling;
 
         private Texture2D _smokeTexture;
@@ -141,11 +142,11 @@ namespace CannonWarz
         }
 
         /**
-         * <summary>    Gets or sets the rocket angle. </summary>
+         * <summary>    Gets or sets the rocket angle in degrees. </summary>
          *
-         * <value>  The rocket angle. </value>
+         * <value>  The rocket angle in degrees. </value>
          */
-        public float RocketAngle
+        public int RocketAngle
         {
             get { return _rocketAngle; }
             set { _rocketAngle = value; }

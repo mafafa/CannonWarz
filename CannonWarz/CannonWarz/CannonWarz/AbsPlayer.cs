@@ -30,7 +30,7 @@ namespace CannonWarz
         protected AbsPlayer(Color color, Texture2D carriageTexture, Texture2D cannonTexture, Texture2D lifeBarTexture, Texture2D greenBarTexture, Texture2D yellowBarTexture, Texture2D redBarTexture)
         {
             IsAlive = true;
-            Angle = MathHelper.ToRadians(90);
+            Angle = 90;
             Power = 100;
             HP = 3;
             Color = color;
@@ -181,11 +181,11 @@ namespace CannonWarz
         }
 
         /**
-         * <summary>    Gets or sets the angle of the player's shot. </summary>
+         * <summary>    Gets or sets the angle of the player's shot in degrees. </summary>
          *
-         * <value>  The angle of the player's shot. </value>
+         * <value>  The angle of the player's shot in degrees. </value>
          */
-        public float Angle
+        public int Angle
         {
             get;
             set;

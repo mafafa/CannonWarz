@@ -62,13 +62,13 @@ namespace CannonWarz.Screens
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    PlayersArray[CurrentPlayer].Angle -= 0.01f;
+                    PlayersArray[CurrentPlayer].Angle -= 1;
                     VerifyAngleRange();
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    PlayersArray[CurrentPlayer].Angle += 0.01f;
+                    PlayersArray[CurrentPlayer].Angle += 1;
                     VerifyAngleRange();
                 }
 
@@ -163,7 +163,7 @@ namespace CannonWarz.Screens
             _terrain.GenerateWindDirection();
 
             // If it is the AI's turn, we call the PlayTurn() method
-            if (PlayersArray[CurrentPlayer].GetType() == typeof(AIPlayer))
+            if (PlayersArray[CurrentPlayer].GetType() == typeof(AIPlayer) && !Finished)
             {
                 isAITurn = true;
                 

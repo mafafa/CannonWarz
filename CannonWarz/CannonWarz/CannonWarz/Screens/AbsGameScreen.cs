@@ -122,13 +122,13 @@ namespace CannonWarz.Screens
 
             else if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                PlayersArray[CurrentPlayer].Angle -= 0.01f;
+                PlayersArray[CurrentPlayer].Angle -= 1;
                 VerifyAngleRange();
             }
 
             else if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                PlayersArray[CurrentPlayer].Angle += 0.01f;
+                PlayersArray[CurrentPlayer].Angle += 1;
                 VerifyAngleRange();
             }
 
@@ -176,19 +176,15 @@ namespace CannonWarz.Screens
             if (RocketIsFlying)
             {
                 Vector2 gravity = new Vector2(0, Terrain.g);
-                //Vector2 totalAcceleration = gravity + _terrain.WindDirection;
                 float deltaT = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                float initialSpeed = PlayersArray[CurrentPlayer].Power;
-                float theta = PlayersArray[CurrentPlayer].Angle;
 
                 foreach (Rocket rocket in _instantiatedRocketList)
                 {
-                    rocket.RocketSpeed += Vector2.Multiply(/*totalAcceleration*/gravity, deltaT);
-                    rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(/*totalAcceleration*/gravity, (float)0.5) * deltaT * deltaT;
+                    rocket.RocketSpeed += Vector2.Multiply(gravity, deltaT);
+                    rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(Vector2.Multiply(Vector2.Multiply(gravity, (float)0.5), deltaT), deltaT);
 
                     // We update the angle of the rocket accordingly
-                    rocket.RocketAngle = (float)Math.Atan2(rocket.RocketSpeed.X, -rocket.RocketSpeed.Y);
+                    rocket.RocketAngle = (int)MathHelper.ToDegrees((float)Math.Atan2(rocket.RocketSpeed.X, -rocket.RocketSpeed.Y));
 
                     rocket.CreateSmokeParticles(3);
                 }
@@ -263,11 +259,14 @@ namespace CannonWarz.Screens
                 Vector2 terrainCollisionPoint = CheckTerrainCollision(rocket);
                 Vector2 playerCollisionPoint = CheckPlayersCollision(rocket);
                 bool rocketOutOfScreen = CheckRocketOutOfScreen(rocket);
+                bool collisionAlreadyDetected = false;  // Sometimes 2 collisions can be detected at once and will change 2 times the player ( there
+                                                        // will be 2 calls to NextPlayer()). This is to avoid this.
 
                 // If there was a collision or the rocket goes out of the screen, we delete the smoke trail and change to the next player
-                if (playerCollisionPoint.X > -1)
+                if (playerCollisionPoint.X > -1 )
                 {
                     RocketIsFlying = false;
+                    collisionAlreadyDetected = true;
 
                     CreateExplosion(playerCollisionPoint, 10, 80.0f, 2000.0f, gameTime);
 
@@ -278,9 +277,10 @@ namespace CannonWarz.Screens
                     NextPlayer();
                 }
 
-                if (terrainCollisionPoint.X > -1)
+                if (terrainCollisionPoint.X > -1 && !collisionAlreadyDetected)
                 {
                     RocketIsFlying = false;
+                    collisionAlreadyDetected = true;
 
                     CreateExplosion(terrainCollisionPoint, 4, 30.0f, 1000.0f, gameTime);
 
@@ -291,7 +291,7 @@ namespace CannonWarz.Screens
                     NextPlayer();
                 }
 
-                if (rocketOutOfScreen)
+                if (rocketOutOfScreen && !collisionAlreadyDetected)
                 {
                     RocketIsFlying = false;
 
@@ -377,7 +377,7 @@ namespace CannonWarz.Screens
         protected Vector2 CheckTerrainCollision(Rocket rocket)
         {
             Matrix rocketMat = Matrix.CreateTranslation(-42, -240, 0) *
-                Matrix.CreateRotationZ(rocket.RocketAngle) *
+                Matrix.CreateRotationZ(MathHelper.ToRadians(rocket.RocketAngle)) *
                 Matrix.CreateScale(rocket.RocketScaling) *
                 Matrix.CreateTranslation(rocket.RocketPosition.X, rocket.RocketPosition.Y, 0);
             Matrix terrainMat = Matrix.Identity;
@@ -403,7 +403,7 @@ namespace CannonWarz.Screens
         protected Vector2 CheckPlayersCollision(Rocket rocket)
         {
             Matrix rocketMat = Matrix.CreateTranslation(-42, -240, 0) *
-                Matrix.CreateRotationZ(rocket.RocketAngle) *
+                Matrix.CreateRotationZ(MathHelper.ToRadians(rocket.RocketAngle)) *
                 Matrix.CreateScale(rocket.RocketScaling) *
                 Matrix.CreateTranslation(rocket.RocketPosition.X, rocket.RocketPosition.Y, 0);
 
@@ -426,7 +426,7 @@ namespace CannonWarz.Screens
                         Vector2 carriageCollisionPoint = TexturesCollide(player.CarriageColorArray, carriageMat, rocket.RocketColorArray, rocketMat);
 
                         Matrix cannonMat = Matrix.CreateTranslation(-11, -50, 0) *
-                            Matrix.CreateRotationZ(player.Angle) *
+                            Matrix.CreateRotationZ(MathHelper.ToRadians(player.Angle)) *
                             Matrix.CreateScale(player.PlayerScaling) *
                             Matrix.CreateTranslation(xPos + 20, yPos - 10, 0);
 
@@ -534,7 +534,7 @@ namespace CannonWarz.Screens
                     float cannonPosY = player.Position.Y - 15;
 
                     SpriteBatch.Draw(player.CarriageTexture, player.Position, null, player.Color, 0, new Vector2(0, player.CarriageTexture.Height), player.PlayerScaling, SpriteEffects.None, 0);
-                    SpriteBatch.Draw(player.CannonTexture, new Vector2(cannonPosX, cannonPosY), null, player.Color, player.Angle, cannonOrigin, player.PlayerScaling, SpriteEffects.None, 1);
+                    SpriteBatch.Draw(player.CannonTexture, new Vector2(cannonPosX, cannonPosY), null, player.Color, MathHelper.ToRadians(player.Angle), cannonOrigin, player.PlayerScaling, SpriteEffects.None, 1);
 
                     // We position the life bar
                     float lifeBarPosX = player.Position.X + 15;
@@ -572,7 +572,7 @@ namespace CannonWarz.Screens
         protected void DrawScreenOverlay()
         {
             // We draw the power and angle strings
-            int currentAngle = (int)MathHelper.ToDegrees(PlayersArray[CurrentPlayer].Angle);
+            int currentAngle = PlayersArray[CurrentPlayer].Angle;
 
             SpriteBatch.DrawString(Game.GeneralFont, "Cannon angle: " + currentAngle.ToString(), new Vector2(20, 20), PlayersArray[CurrentPlayer].Color);
             SpriteBatch.DrawString(Game.GeneralFont, "Cannon power: " + PlayersArray[CurrentPlayer].Power.ToString(), new Vector2(20, 45), PlayersArray[CurrentPlayer].Color);
@@ -600,7 +600,7 @@ namespace CannonWarz.Screens
         {
             if (RocketIsFlying)
             {
-                SpriteBatch.Draw(Game.RocketTexture, rocket.RocketPosition, null, PlayersArray[CurrentPlayer].Color, rocket.RocketAngle, new Vector2(42, 240), rocket.RocketScaling, SpriteEffects.None, 1);
+                SpriteBatch.Draw(Game.RocketTexture, rocket.RocketPosition, null, PlayersArray[CurrentPlayer].Color, MathHelper.ToRadians(rocket.RocketAngle), new Vector2(42, 240), rocket.RocketScaling, SpriteEffects.None, 1);
             }
         }
 
@@ -655,13 +655,13 @@ namespace CannonWarz.Screens
          */
         protected void VerifyAngleRange()
         {
-            if (PlayersArray[CurrentPlayer].Angle > MathHelper.PiOver2)
+            if (PlayersArray[CurrentPlayer].Angle > 90)
             {
-                PlayersArray[CurrentPlayer].Angle = -MathHelper.PiOver2;
+                PlayersArray[CurrentPlayer].Angle = -90;
             }
-            if (PlayersArray[CurrentPlayer].Angle < -MathHelper.PiOver2)
+            if (PlayersArray[CurrentPlayer].Angle < -90)
             {
-                PlayersArray[CurrentPlayer].Angle = MathHelper.PiOver2;
+                PlayersArray[CurrentPlayer].Angle = 90;
             }
         }
 
