@@ -160,7 +160,7 @@ namespace CannonWarz
             {
                 screensToDraw.Add(screen);
 
-                if (screen.BlocksDraw)
+                if (screen.BreaksDraw)
                 {
                     break;
                 }

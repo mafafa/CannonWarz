@@ -27,8 +27,6 @@ namespace CannonWarz.Screens
          */
         public override void Initialize()
         {
-            
-            
             base.Initialize();
         }
 
@@ -135,10 +133,13 @@ namespace CannonWarz.Screens
             for (int i = 1; i < NumberOfPlayers; i++)
             {
                 // We create the player
-                PlayersArray[i] = new AIPlayer(playerColors[i], carriageTexture, cannonTexture, lifeBarTexture, greenBarTexture, yellowBarTexture, redBarTexture);
+                PlayersArray[i] = new AIPlayer(playerColors[i], Game.RandomAITargetingFactor, carriageTexture, cannonTexture, lifeBarTexture, greenBarTexture, yellowBarTexture, redBarTexture);
 
                 // We set his position
                 PlayersArray[i].PlacePlayer(NumberOfPlayers, i, Game.ScreenWidth, _terrain);
+
+                // We change the random targeting factor for the next AI player
+                Game.RandomAITargetingFactor++;
             }
 
             // We flatten the ground under their positions
@@ -163,7 +164,7 @@ namespace CannonWarz.Screens
             _terrain.GenerateWindDirection();
 
             // If it is the AI's turn, we call the PlayTurn() method
-            if (PlayersArray[CurrentPlayer].GetType() == typeof(AIPlayer) && !Finished)
+            if (PlayersArray[CurrentPlayer].GetType() == typeof(AIPlayer) && !GameFinished)
             {
                 isAITurn = true;
                 

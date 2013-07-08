@@ -25,7 +25,7 @@ namespace CannonWarz.Screens
             Initialized = false;
             Game = game;
             SpriteBatch = spriteBatch;
-            BlocksDraw = false;
+            BreaksDraw = false;
         }
 
         /**
@@ -104,17 +104,14 @@ namespace CannonWarz.Screens
         }
 
         /**
-         * <summary>    
-         *  Gets or sets a value indicating whether the screen blocks drawing of screens underneath it
-         *  in the game screen manager's stack.              
-         * </summary>
+         * <summary>    Gets or sets a value indicating whether the screens under this screen should be drawn or not. </summary>
          *
-         * <value>  true if blocks draw, false if not. </value>
+         * <value>  false if they should be drawn, true if not. </value>
          */
-        public bool BlocksDraw
+        public bool BreaksDraw
         {
             get;
-            protected set;
+            set;
         }
 
         /**

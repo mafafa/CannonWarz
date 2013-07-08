@@ -125,15 +125,23 @@ namespace CannonWarz.Screens
                 {
                     case "Single Player Game":
                         GameScreenManager gameScreenManager = GameScreenManager.Instance;
-                        // We pop the main menu
-                        gameScreenManager.Pop();
+
+                        // We push a new background screen with its BreaksDraw set to true
+                        gameScreenManager.Push(new Background(Game, SpriteBatch));
+                        Background backgroundScreen = (Background)gameScreenManager.ActiveScreen;
+                        backgroundScreen.BreaksDraw = true;
+
                         gameScreenManager.Push(new SinglePlayerGameScreen(Game, SpriteBatch));
                         break;
 
                     case "Local Multi Player Game":
                         gameScreenManager = GameScreenManager.Instance;
-                        // We pop the main menu
-                        gameScreenManager.Pop();
+
+                        // We push a new background screen with its BreaksDraw set to true
+                        gameScreenManager.Push(new Background(Game, SpriteBatch));
+                        backgroundScreen = (Background)gameScreenManager.ActiveScreen;
+                        backgroundScreen.BreaksDraw = true;
+                        
                         gameScreenManager.Push(new LocalMultiGameScreen(Game, SpriteBatch));
                         break;
 

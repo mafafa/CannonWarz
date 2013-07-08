@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("XNATest")]
-[assembly: AssemblyProduct("XNATest")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Cannon Warz")]
+[assembly: AssemblyProduct("Cannon Warz")]
+[assembly: AssemblyDescription("A small XNA Cannon game")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]

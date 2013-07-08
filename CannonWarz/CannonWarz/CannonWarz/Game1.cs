@@ -30,6 +30,8 @@ namespace CannonWarz
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.IsFullScreen = false;
             Window.Title = "Cannon Warz";
+
+            RandomAITargetingFactor = 0;
         }
 
         /**
@@ -239,6 +241,20 @@ namespace CannonWarz
         public SpriteFont MenuFont
         {
             get { return _menuFont; }
+        }
+
+        /**
+         * <summary>    
+         *  Gets or sets the int that will be passed to a random 
+         *  generator in order for the AI player to know who to target next. 
+         * </summary>
+         *
+         * <value>  The random int i targeting factor. </value>
+         */
+        public int RandomAITargetingFactor
+        {
+            get;
+            set;
         }
 
         /**

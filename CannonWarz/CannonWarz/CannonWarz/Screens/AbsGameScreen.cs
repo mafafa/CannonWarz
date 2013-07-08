@@ -12,7 +12,7 @@ namespace CannonWarz.Screens
     {
         protected AbsGameScreen(Game1 game, SpriteBatch spriteBatch)
             : base(game, spriteBatch)
-        {
+        {            
             NumberOfPlayers = 4;
             CurrentPlayer = 0;
 
@@ -98,7 +98,7 @@ namespace CannonWarz.Screens
             }
 
             // If the game is finished, we push the win screen
-            if (Finished)
+            if (GameFinished)
             {
                 GameScreenManager gameScreenManager = GameScreenManager.Instance;
                 gameScreenManager.Push(new WinScreen(Game, SpriteBatch, PlayersArray[CurrentPlayer]));
@@ -184,7 +184,7 @@ namespace CannonWarz.Screens
                     rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(Vector2.Multiply(Vector2.Multiply(gravity, (float)0.5), deltaT), deltaT);
 
                     // We update the angle of the rocket accordingly
-                    rocket.RocketAngle = (int)MathHelper.ToDegrees((float)Math.Atan2(rocket.RocketSpeed.X, -rocket.RocketSpeed.Y));
+                    rocket.RocketAngle = (int)Math.Round(MathHelper.ToDegrees((float)Math.Atan2(rocket.RocketSpeed.X, -rocket.RocketSpeed.Y)));
 
                     rocket.CreateSmokeParticles(3);
                 }
@@ -259,7 +259,7 @@ namespace CannonWarz.Screens
                 Vector2 terrainCollisionPoint = CheckTerrainCollision(rocket);
                 Vector2 playerCollisionPoint = CheckPlayersCollision(rocket);
                 bool rocketOutOfScreen = CheckRocketOutOfScreen(rocket);
-                bool collisionAlreadyDetected = false;  // Sometimes 2 collisions can be detected at once and will change 2 times the player ( there
+                bool collisionAlreadyDetected = false;  // Sometimes 2 collisions can be detected at once and will change 2 times the player (there
                                                         // will be 2 calls to NextPlayer()). This is to avoid this.
 
                 // If there was a collision or the rocket goes out of the screen, we delete the smoke trail and change to the next player
@@ -782,7 +782,7 @@ namespace CannonWarz.Screens
          *
          * <value>  true if finished, false if not. </value>
          */
-        public bool Finished
+        public bool GameFinished
         {
             get
             {

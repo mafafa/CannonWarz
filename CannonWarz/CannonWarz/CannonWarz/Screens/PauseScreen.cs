@@ -130,10 +130,10 @@ namespace CannonWarz.Screens
 
                     case "Main Menu":
                         gameScreenManager = GameScreenManager.Instance;
-                        // We pop both the pause screen and game screen
+                        // We pop both the pause screen and game screen and the second background screen
                         gameScreenManager.Pop();
                         gameScreenManager.Pop();
-                        gameScreenManager.Push(new MainMenu(Game, SpriteBatch));
+                        gameScreenManager.Pop();
                         break;
                     
                     case "Exit":
