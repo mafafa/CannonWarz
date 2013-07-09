@@ -5,7 +5,7 @@ var searchData=
   ['carriagecolorarray',['CarriageColorArray',['../class_cannon_warz_1_1_abs_player.html#a4e4bf68b885e2e6bf6d2db38b197b587',1,'CannonWarz::AbsPlayer']]],
   ['carriagetexture',['CarriageTexture',['../class_cannon_warz_1_1_abs_player.html#a80a20dff83426be3a84295b93e995b37',1,'CannonWarz.AbsPlayer.CarriageTexture()'],['../class_cannon_warz_1_1_game1.html#a6422337aa00d8f719d9b2e138961dfc3',1,'CannonWarz.Game1.CarriageTexture()']]],
   ['color',['Color',['../class_cannon_warz_1_1_abs_player.html#a20b2de44e37258526973c7a7229f346b',1,'CannonWarz::AbsPlayer']]],
-  ['compassscaling',['CompassScaling',['../class_cannon_warz_1_1_screens_1_1_game_screen.html#a8c01be86ad9eceb5198dbb01628d61b5',1,'CannonWarz::Screens::GameScreen']]],
+  ['compassscaling',['CompassScaling',['../class_cannon_warz_1_1_screens_1_1_abs_game_screen.html#adad80dcb662e55a44990cb705e55f28b',1,'CannonWarz::Screens::AbsGameScreen']]],
   ['compasstexture',['CompassTexture',['../class_cannon_warz_1_1_game1.html#ac04db41b3a84cbc9daf178262e358092',1,'CannonWarz::Game1']]],
-  ['currentplayer',['CurrentPlayer',['../class_cannon_warz_1_1_screens_1_1_game_screen.html#a3475ec606673c1a632c1a0c0ea4ad634',1,'CannonWarz::Screens::GameScreen']]]
+  ['currentplayer',['CurrentPlayer',['../class_cannon_warz_1_1_screens_1_1_abs_game_screen.html#ae5baa3a472a3327f883be658aa421edd',1,'CannonWarz::Screens::AbsGameScreen']]]
 ];

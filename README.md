@@ -7,6 +7,7 @@ Features for now include:
 - Randomly generated maps each time you open the game (though the cannons' position are fixed).
 - Randomly generated wind that changes at the end of each player's turn.
 - Particles (when the rocket explodes)
+- Basic AI in single player mode
 
 Controls (until I make them configurable)
 - Left and Right arrows to modify the cannon's angle.

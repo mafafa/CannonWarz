@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['verifyanglerange',['VerifyAngleRange',['../class_cannon_warz_1_1_screens_1_1_game_screen.html#afcbdb7a65ab493eab583e485bd616485',1,'CannonWarz::Screens::GameScreen']]],
-  ['verifypowerrange',['VerifyPowerRange',['../class_cannon_warz_1_1_screens_1_1_game_screen.html#ad962c966efb29101a0eff54c34eb13c2',1,'CannonWarz::Screens::GameScreen']]]
+  ['verifyanglerange',['VerifyAngleRange',['../class_cannon_warz_1_1_screens_1_1_abs_game_screen.html#abdc81578aa60d89c13643c936de8fb8b',1,'CannonWarz::Screens::AbsGameScreen']]],
+  ['verifypowerrange',['VerifyPowerRange',['../class_cannon_warz_1_1_screens_1_1_abs_game_screen.html#a74feaba362c287b50a0f996347907a0e',1,'CannonWarz::Screens::AbsGameScreen']]]
 ];

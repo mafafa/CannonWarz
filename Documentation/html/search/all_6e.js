@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['nextplayer',['NextPlayer',['../class_cannon_warz_1_1_screens_1_1_game_screen.html#af82700ab5df9ede1d2d74f859136c186',1,'CannonWarz::Screens::GameScreen']]],
-  ['numberofplayers',['NumberOfPlayers',['../class_cannon_warz_1_1_screens_1_1_game_screen.html#a391be2f81f3812882545a68b8fa41c05',1,'CannonWarz::Screens::GameScreen']]]
+  ['nextplayer',['NextPlayer',['../class_cannon_warz_1_1_screens_1_1_abs_game_screen.html#aa60b2dda8109896ee5c8e2478a02c17c',1,'CannonWarz.Screens.AbsGameScreen.NextPlayer()'],['../class_cannon_warz_1_1_screens_1_1_local_multi_game_screen.html#a997232e2f41db683875020fa6c08c373',1,'CannonWarz.Screens.LocalMultiGameScreen.NextPlayer()'],['../class_cannon_warz_1_1_screens_1_1_single_player_game_screen.html#adee13b962bd796fa58b7762c6121387c',1,'CannonWarz.Screens.SinglePlayerGameScreen.NextPlayer()']]],
+  ['numberofplayers',['NumberOfPlayers',['../class_cannon_warz_1_1_screens_1_1_abs_game_screen.html#a75afca60348b36f7d622863f1ac53708',1,'CannonWarz::Screens::AbsGameScreen']]]
 ];

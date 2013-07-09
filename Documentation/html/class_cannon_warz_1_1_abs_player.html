@@ -107,7 +107,8 @@ Inheritance diagram for CannonWarz.AbsPlayer:</div>
  <div class="center">
   <img src="class_cannon_warz_1_1_abs_player.png" usemap="#CannonWarz.AbsPlayer_map" alt=""/>
   <map id="CannonWarz.AbsPlayer_map" name="CannonWarz.AbsPlayer_map">
-<area href="class_cannon_warz_1_1_human_player.html" title="Player class. Each instantiated object of this class represents a player in the game. " alt="CannonWarz.HumanPlayer" shape="rect" coords="0,56,165,80"/>
+<area href="class_cannon_warz_1_1_a_i_player.html" title="AI player class. " alt="CannonWarz.AIPlayer" shape="rect" coords="0,56,165,80"/>
+<area href="class_cannon_warz_1_1_human_player.html" title="Player class. Each instantiated object of this class represents a player in the game. " alt="CannonWarz.HumanPlayer" shape="rect" coords="175,56,340,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -176,9 +177,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a20b2de44e37258526973c7a7229f346b"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cannon_warz_1_1_abs_player.html#a20b2de44e37258526973c7a7229f346b">Color</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a20b2de44e37258526973c7a7229f346b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets the color of the player.  <a href="#a20b2de44e37258526973c7a7229f346b">More...</a><br/></td></tr>
 <tr class="separator:a20b2de44e37258526973c7a7229f346b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a481b2e2202241f5ef5130c9661ea963f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cannon_warz_1_1_abs_player.html#a481b2e2202241f5ef5130c9661ea963f">Angle</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a481b2e2202241f5ef5130c9661ea963f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets the angle of the player's shot.  <a href="#a481b2e2202241f5ef5130c9661ea963f">More...</a><br/></td></tr>
-<tr class="separator:a481b2e2202241f5ef5130c9661ea963f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7108b99939804b1cff25a37f9e01a53"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cannon_warz_1_1_abs_player.html#af7108b99939804b1cff25a37f9e01a53">Angle</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:af7108b99939804b1cff25a37f9e01a53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets the angle of the player's shot in degrees.  <a href="#af7108b99939804b1cff25a37f9e01a53">More...</a><br/></td></tr>
+<tr class="separator:af7108b99939804b1cff25a37f9e01a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9d3f145c70ec36521adbcc43430b5c0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cannon_warz_1_1_abs_player.html#ac9d3f145c70ec36521adbcc43430b5c0">Power</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ac9d3f145c70ec36521adbcc43430b5c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets the power of the player's shot.  <a href="#ac9d3f145c70ec36521adbcc43430b5c0">More...</a><br/></td></tr>
 <tr class="separator:ac9d3f145c70ec36521adbcc43430b5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -387,7 +388,7 @@ static Dictionary&lt; uint, String &gt;&#160;</td><td class="memItemRight" valig
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
-<a class="anchor" id="a481b2e2202241f5ef5130c9661ea963f"></a>
+<a class="anchor" id="af7108b99939804b1cff25a37f9e01a53"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -395,7 +396,7 @@ static Dictionary&lt; uint, String &gt;&#160;</td><td class="memItemRight" valig
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float CannonWarz.AbsPlayer.Angle</td>
+          <td class="memname">int CannonWarz.AbsPlayer.Angle</td>
         </tr>
       </table>
   </td>
@@ -404,7 +405,7 @@ static Dictionary&lt; uint, String &gt;&#160;</td><td class="memItemRight" valig
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The angle of the player's shot. </p>
+<p>The angle of the player's shot in degrees. </p>
 
 </div>
 </div>
@@ -750,7 +751,7 @@ static Dictionary&lt; uint, String &gt;&#160;</td><td class="memItemRight" valig
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 16 2013 23:07:39 for Cannon Warz by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 8 2013 23:14:41 for Cannon Warz by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>
