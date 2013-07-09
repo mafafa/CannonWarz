@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+﻿/**
+// file:	Screens\SinglePlayerGameScreen.cs
+//
+// summary:	Implements the single player game screen class
+ */
+
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace CannonWarz.Screens
 {
+    /**
+     * <summary>    Single player game screen. </summary>
+     */
     public class SinglePlayerGameScreen : AbsGameScreen
     {
         /**
@@ -109,6 +114,18 @@ namespace CannonWarz.Screens
 
         #endregion
 
+        /**
+         * <summary>
+         *  Creates the players, calls PlacePlayer() and flattens the terrain under the players.
+         * </summary>
+         *
+         * <param name="carriageTexture">   The carriage texture. </param>
+         * <param name="cannonTexture">     The cannon texture. </param>
+         * <param name="lifeBarTexture">    The life bar texture. </param>
+         * <param name="greenBarTexture">   The green bar texture. </param>
+         * <param name="yellowBarTexture">  The yellow bar texture. </param>
+         * <param name="redBarTexture">     The red bar texture. </param>
+         */
         protected override void CreatePlayers(Texture2D carriageTexture, Texture2D cannonTexture, Texture2D lifeBarTexture, Texture2D greenBarTexture, Texture2D yellowBarTexture, Texture2D redBarTexture)
         {
             Color[] playerColors = new Color[10];
@@ -146,6 +163,11 @@ namespace CannonWarz.Screens
             _terrain.FlattenTerrainBelowPlayers(PlayersArray);
         }
 
+        /**
+         * <summary>    
+         *  Switches to the next player's turn and calls GenerateWindDirection(). Also plays the AI's turn.
+         * </summary>
+         */
         protected override void NextPlayer()
         {
             // We increment the current player
@@ -183,14 +205,13 @@ namespace CannonWarz.Screens
             }
         }
 
-        #region --------------------- PRIVATE FIELDS ---------------------
-
-
-
-        #endregion
-
         #region ----------------------- PROPERTIES -----------------------
 
+        /**
+         * <summary>    Gets or sets a value indicating whether it is the AI's turn to play. </summary>
+         *
+         * <value>  true if it is the AI's turn to play, false if not. </value>
+         */
         public bool isAITurn
         {
             get;

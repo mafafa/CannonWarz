@@ -133,7 +133,7 @@ namespace CannonWarz
         }
 
         /**
-         * <summary>    Generates the wind's direction randomply. </summary>
+         * <summary>    Generates the wind's direction randomly. </summary>
          */
         public void GenerateWindDirection()
         {

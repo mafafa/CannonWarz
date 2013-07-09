@@ -1,15 +1,29 @@
-﻿using System;
+﻿/**
+// file:	Screens\AbsGameScreen.cs
+//
+// summary:	Implements the abstract game screen class
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace CannonWarz.Screens
 {
+    /**
+     * <summary>    Abstract game screen. All game screens are derived from this class. </summary>
+     */
     public abstract class AbsGameScreen : AbsScreen
     {
+        /**
+         * <summary>    Specialised constructor for use only by derived classes. </summary>
+         *
+         * <param name="game">          The game instance. </param>
+         * <param name="spriteBatch">   The sprite batch to be used to draw on screen. </param>
+         */
         protected AbsGameScreen(Game1 game, SpriteBatch spriteBatch)
             : base(game, spriteBatch)
         {            
@@ -177,11 +191,12 @@ namespace CannonWarz.Screens
             {
                 Vector2 gravity = new Vector2(0, Terrain.g);
                 float deltaT = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Vector2 acceleration = gravity + _terrain.WindDirection;
 
                 foreach (Rocket rocket in _instantiatedRocketList)
                 {
-                    rocket.RocketSpeed += Vector2.Multiply(gravity, deltaT);
-                    rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(Vector2.Multiply(Vector2.Multiply(gravity, (float)0.5), deltaT), deltaT);
+                    rocket.RocketSpeed += Vector2.Multiply(acceleration, deltaT);
+                    rocket.RocketPosition += Vector2.Multiply(rocket.RocketSpeed, deltaT) + Vector2.Multiply(Vector2.Multiply(Vector2.Multiply(acceleration, (float)0.5), deltaT), deltaT);
 
                     // We update the angle of the rocket accordingly
                     rocket.RocketAngle = (int)Math.Round(MathHelper.ToDegrees((float)Math.Atan2(rocket.RocketSpeed.X, -rocket.RocketSpeed.Y)));
