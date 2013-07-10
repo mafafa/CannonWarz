@@ -1,6 +1,6 @@
 [Setup]
 AppName=Cannon Warz
-AppVersion=1.1
+AppVersion=1.2
 AppPublisher=Mathieu-Alexandre Fafard
 DefaultDirName={pf32}\Cannon Warz
 DefaultGroupName=Cannon Warz
